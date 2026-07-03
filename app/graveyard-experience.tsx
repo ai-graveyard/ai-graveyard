@@ -270,6 +270,35 @@ const products: Product[] = [
       },
     },
   },
+  {
+    id: "snap-stick",
+    name: "snap-stick",
+    repository: "https://github.com/ai-graveyard/snap-stick",
+    born: "2026.07",
+    buried: "2026.07",
+    lane: "3",
+    plot: "5",
+    accent: "#33e0c0",
+    plant: "chipflower",
+    copy: {
+      en: {
+        status: "Open sourced",
+        epitaph: "Point, shoot, sticker. Nobody stuck around.",
+        autopsy:
+          "A Polaroid-style camera that turned any moment into a cartoon sticker on web and on-device, yet never turned a cute demo into a reason to keep shooting.",
+        stack: ["Swift", "Next.js", "Sticker UX"],
+        signal: "0 stars",
+      },
+      zh: {
+        status: "已开源",
+        epitaph: "对准、快门、贴纸，却没黏住一个用户。",
+        autopsy:
+          "一台拍立得风格的相机，把任意瞬间变成卡通贴纸，网页端和 iOS 端都能玩，却没能把一个可爱的 demo 变成让人一直拍下去的理由。",
+        stack: ["Swift", "Next.js", "贴纸体验"],
+        signal: "0 星标",
+      },
+    },
+  },
 ];
 
 const copy: Record<Language, SiteCopy> = {
