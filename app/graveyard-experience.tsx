@@ -299,6 +299,35 @@ const products: Product[] = [
       },
     },
   },
+  {
+    id: "mbai",
+    name: "mbai",
+    repository: "https://github.com/ai-graveyard/mbai",
+    born: "2026.04",
+    buried: "2026.04",
+    lane: "2",
+    plot: "6",
+    accent: "#5da9ff",
+    plant: "mushroom",
+    copy: {
+      en: {
+        status: "Open sourced",
+        epitaph: "Sixteen personalities. Zero returning visitors.",
+        autopsy:
+          "A twelve-question AI-personality quiz that mapped everyone into a tidy four-letter type, then learned self-discovery isn't a habit people repeat.",
+        stack: ["Next.js", "Framer Motion", "Personality Quiz"],
+        signal: "0 stars",
+      },
+      zh: {
+        status: "已开源",
+        epitaph: "十六种人格，零个回头客。",
+        autopsy:
+          "一份十二题的 AI 人格测试，把每个人都装进四个字母的整齐格子，最后发现自我认知这件事，大家并不想天天做。",
+        stack: ["Next.js", "Framer Motion", "人格测试"],
+        signal: "0 星标",
+      },
+    },
+  },
 ];
 
 const copy: Record<Language, SiteCopy> = {
@@ -374,7 +403,7 @@ const copy: Record<Language, SiteCopy> = {
 };
 
 const graveyardYears = ["2025", "2026"];
-const plots = ["1", "2", "3", "4", "5"];
+const plots = ["1", "2", "3", "4", "5", "6"];
 const graveCount = products.length;
 const buryAnimationMs = 1450;
 const productIds = new Set(products.map((product) => product.id));
