@@ -457,6 +457,8 @@
   min-width: 0;
   max-width: 100%;
   padding: 0.8rem;
+  overflow: hidden;
+  animation: dossierSelect 380ms steps(5, end);
 }
 
 .dossier::before {
@@ -465,6 +467,81 @@
   inset: 0.45rem;
   border: 2px dashed rgba(47, 35, 71, 0.28);
   pointer-events: none;
+}
+
+/* PvZ-style vines that sprout up from the panel's bottom edge when it switches */
+.dossierVines {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  height: 2.6rem;
+  pointer-events: none;
+  image-rendering: pixelated;
+  clip-path: inset(100% 0 0 0);
+  animation: dossierVineRise 640ms steps(5, end);
+}
+
+.dossierVines::before {
+  content: "";
+  position: absolute;
+  left: 1.6rem;
+  bottom: 0.1rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: #205934;
+  box-shadow:
+    /* stalk 1 */
+    0 -0.5rem 0 #44d17a,
+    0 -1rem 0 #9cff6d,
+    0.5rem -0.5rem 0 #44d17a,
+    -0.5rem -1rem 0 #9cff6d,
+    /* stalk 2 (tall) */
+    3rem 0 0 #205934,
+    3rem -0.5rem 0 #44d17a,
+    3rem -1rem 0 #44d17a,
+    3rem -1.5rem 0 #9cff6d,
+    3.5rem -1rem 0 #9cff6d,
+    2.5rem -0.5rem 0 #44d17a,
+    /* stalk 3 */
+    6rem 0 0 #205934,
+    6rem -0.5rem 0 #44d17a,
+    6rem -1rem 0 #9cff6d,
+    5.5rem -1rem 0 #44d17a,
+    /* stalk 4 (tall) */
+    9rem 0 0 #205934,
+    9rem -0.5rem 0 #44d17a,
+    9rem -1rem 0 #44d17a,
+    9rem -1.5rem 0 #9cff6d,
+    9.5rem -1rem 0 #9cff6d,
+    /* stalk 5 */
+    12rem 0 0 #205934,
+    12rem -0.5rem 0 #44d17a,
+    12rem -1rem 0 #9cff6d,
+    11.5rem -0.5rem 0 #44d17a;
+}
+
+/* Dust puff kicked up along the bottom edge when the panel thuds down */
+.dossierDust {
+  position: absolute;
+  left: 1rem;
+  bottom: 0.5rem;
+  z-index: 5;
+  width: 0.45rem;
+  height: 0.45rem;
+  background: #e8dfc8;
+  box-shadow:
+    2.5rem 0 0 #d4c9aa,
+    5rem -0.15rem 0 #e8dfc8,
+    7.8rem 0.1rem 0 #c8b98f,
+    10.5rem -0.1rem 0 #d4c9aa,
+    13.2rem 0.05rem 0 #e8dfc8,
+    16rem -0.15rem 0 #c8b98f;
+  opacity: 0;
+  pointer-events: none;
+  image-rendering: pixelated;
+  animation: dossierDust 400ms steps(4, end) 140ms;
 }
 
 .dossierTopline {
@@ -2072,6 +2149,74 @@
   }
 }
 
+/* Plant drop: panel thuds down hard from above, overshoots, and settles — like slamming down a PvZ seed */
+@keyframes dossierSelect {
+  0% {
+    transform: translateY(-0.9rem);
+    filter: brightness(1.35);
+  }
+
+  40% {
+    transform: translateY(0.3rem);
+    filter: brightness(1.18);
+  }
+
+  65% {
+    transform: translateY(-0.12rem);
+    filter: brightness(1.05);
+  }
+
+  100% {
+    transform: translateY(0);
+    filter: brightness(1);
+  }
+}
+
+/* Vines shoot up from the bottom edge, overshoot, then retract out of sight */
+@keyframes dossierVineRise {
+  0% {
+    clip-path: inset(100% 0 0 0);
+    transform: translateY(0.4rem);
+    opacity: 1;
+  }
+
+  45% {
+    clip-path: inset(0 0 0 0);
+    transform: translateY(-0.2rem);
+    opacity: 1;
+  }
+
+  70% {
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    clip-path: inset(55% 0 0 0);
+    transform: translateY(0.35rem);
+    opacity: 0;
+  }
+}
+
+/* Dust puff bursts up and dissipates as the panel lands */
+@keyframes dossierDust {
+  0% {
+    opacity: 0;
+    transform: translateY(0.25rem) scale(0.5);
+  }
+
+  35% {
+    opacity: 0.95;
+    transform: translateY(-0.1rem) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-0.7rem) scale(1.4);
+  }
+}
+
 @media (max-width: 860px) {
   .stage {
     grid-template-columns: 1fr;
@@ -2296,6 +2441,9 @@
   .zombieArm,
   .zombieLeg,
   .activeTombstone,
+  .dossier,
+  .dossierVines,
+  .dossierDust,
   .tombstone:focus-visible .ghost,
   .activeTombstone .ghost,
   .consumingTombstone,

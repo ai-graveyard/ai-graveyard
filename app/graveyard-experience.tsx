@@ -889,7 +889,13 @@ export default function GraveyardExperience() {
           <p className={styles.subtitle}>{t.subtitle}</p>
         </div>
 
-        <aside className={styles.dossier} aria-label={t.dossierAria}>
+        <aside
+          key={activeProduct.id}
+          className={styles.dossier}
+          aria-label={t.dossierAria}
+        >
+          <span className={styles.dossierVines} aria-hidden="true" />
+          <span className={styles.dossierDust} aria-hidden="true" />
           <div className={styles.dossierTopline}>
             <span>{t.currentGrave}</span>
             <span>
