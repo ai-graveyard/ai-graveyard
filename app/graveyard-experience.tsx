@@ -328,6 +328,35 @@ const products: Product[] = [
       },
     },
   },
+  {
+    id: "remove-ai-flavor",
+    name: "remove-ai-flavor",
+    repository: "https://github.com/ai-graveyard/remove-ai-flavor",
+    born: "2025.10",
+    buried: "2026.07",
+    lane: "1",
+    plot: "2",
+    accent: "#f5b94a",
+    plant: "sprout",
+    copy: {
+      en: {
+        status: "Open sourced",
+        epitaph: "It scrubbed the AI flavor out of your writing. Nobody came back for a second wash.",
+        autopsy:
+          "A full-stack humanizer — auth, membership tiers, Stripe, an admin panel — all to make AI text sound less like AI. Turns out people run that wash once, not as a habit.",
+        stack: ["Next.js", "FastAPI", "AI Humanizer"],
+        signal: "0 stars",
+      },
+      zh: {
+        status: "已开源",
+        epitaph: "把别人文字里的 AI 味洗干净，却没洗来第二次的用户。",
+        autopsy:
+          "一整套全栈去味工具：登录、会员分级、Stripe 收款、管理后台样样齐全，只为把 AI 文本改得不像 AI。可惜这道工序大家只走一次，凑不成回头客。",
+        stack: ["Next.js", "FastAPI", "去 AI 味"],
+        signal: "0 星标",
+      },
+    },
+  },
 ];
 
 const copy: Record<Language, SiteCopy> = {
