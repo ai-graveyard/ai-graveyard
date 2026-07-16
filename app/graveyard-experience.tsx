@@ -571,6 +571,58 @@ const hasZombieReachedTarget = (
   target: ZombieTarget,
 ) => position.x === target.x && position.y === target.y;
 
+// 16x18 pixel grid: O=outline S=stone L=stone highlight D=stone shadow E=engraving G=grass H=grass highlight
+const pixelTombstoneRows = [
+  "......OOOO......",
+  ".....OSSSSO.....",
+  "....OSSSSSSO....",
+  "...OSSSSSSSSO...",
+  "...OLSSSSSSDO...",
+  "...OLSSSSSSDO...",
+  "...OLSSESSSDO...",
+  "...OLSSESSSDO...",
+  "...OEEEEEEEEO...",
+  "...OLSSESSSDO...",
+  "...OLSSESSSDO...",
+  "...OLSSSSSSDO...",
+  "...OLSSSSSSDO...",
+  "...ODDDDDDDDO...",
+  "...OGGGGGGGGO...",
+  "..OGGGGGGGGGGO..",
+  ".OGGHGGGGGGHGGO.",
+  "OGGGGGGGGGGGGGGO",
+];
+
+const pixelTombstoneColors: Record<string, string> = {
+  O: "var(--ts-outline)",
+  S: "var(--ts-stone)",
+  L: "var(--ts-stone-light)",
+  D: "var(--ts-stone-dark)",
+  E: "var(--ts-engrave)",
+  G: "var(--ts-grass)",
+  H: "var(--ts-grass-light)",
+};
+
+function PixelTombstoneIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 16 18"
+      role="img"
+      aria-hidden="true"
+      shapeRendering="crispEdges"
+    >
+      {pixelTombstoneRows.flatMap((row, y) =>
+        [...row].map((cell, x) =>
+          cell === "." ? null : (
+            <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill={pixelTombstoneColors[cell]} />
+          ),
+        ),
+      )}
+    </svg>
+  );
+}
+
 const parseBuriedIds = (value: string | null) => {
   if (!value) {
     return new Set<string>();
@@ -884,7 +936,6 @@ export default function GraveyardExperience() {
 
       <header className={styles.header}>
         <a className={styles.brand} href="https://github.com/ai-graveyard">
-          <img className={styles.logo} src="/logo.png" alt="" width={200} height={200} />
           AI Graveyard
         </a>
         <div className={styles.headerActions}>
@@ -942,13 +993,7 @@ export default function GraveyardExperience() {
           <p className={styles.subtitle}>{t.subtitle}</p>
           <figure className={styles.memorial} aria-hidden="true">
             <span className={styles.memorialFrame}>
-              <img
-                className={styles.memorialArt}
-                src="/logo.png"
-                alt=""
-                width={200}
-                height={200}
-              />
+              <PixelTombstoneIcon className={`${styles.pixelTombstone} ${styles.memorialArt}`} />
             </span>
             <span className={styles.memorialLegs} />
             <span className={styles.memorialGround} />
