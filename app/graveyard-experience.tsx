@@ -9,6 +9,7 @@ type Theme = "night" | "day";
 
 type ProductCopy = {
   status: string;
+  tagline: string;
   epitaph: string;
   autopsy: string;
   stack: string[];
@@ -111,6 +112,7 @@ const products: Product[] = [
     copy: {
       en: {
         status: "Open sourced",
+        tagline: "Graduation readiness quiz",
         epitaph: "Are you ready to graduate? The product already did.",
         autopsy:
           "A graduation-readiness experiment that left school early and came back as public source.",
@@ -119,6 +121,7 @@ const products: Product[] = [
       },
       zh: {
         status: "已开源",
+        tagline: "毕业准备度测试",
         epitaph: "准备毕业了吗？产品已经先毕业了。",
         autopsy: "一个毕业准备度实验，提前离校，又以公开源码的身份回来。",
         stack: ["JavaScript", "网页应用", "毕业体验"],
@@ -139,6 +142,7 @@ const products: Product[] = [
     copy: {
       en: {
         status: "Open sourced",
+        tagline: "User persona builder",
         epitaph: "A thousand personas, no paying users.",
         autopsy:
           "A persona builder that made tidy profiles, then discovered nobody wanted another ritual before building.",
@@ -147,6 +151,7 @@ const products: Product[] = [
       },
       zh: {
         status: "已开源",
+        tagline: "用户画像生成器",
         epitaph: "一千个人设，没有一个付费用户。",
         autopsy:
           "一个能整理出漂亮画像的 persona 工具，最后发现大家并不想在动手前再多走一套仪式。",
@@ -168,6 +173,7 @@ const products: Product[] = [
     copy: {
       en: {
         status: "Open sourced",
+        tagline: "Design style almanac",
         epitaph: "Twenty-four vibes entered. One graveyard archived them.",
         autopsy:
           "An interactive design-style guide that became more useful as a fossil than as a product bet.",
@@ -176,6 +182,7 @@ const products: Product[] = [
       },
       zh: {
         status: "已开源",
+        tagline: "设计风格图鉴",
         epitaph: "二十四种 vibe 入场，最后都被墓园归档。",
         autopsy: "一个互动设计风格指南，作为化石反而比作为产品赌注更有用。",
         stack: ["TypeScript", "设计指南", "交互界面"],
@@ -196,6 +203,7 @@ const products: Product[] = [
     copy: {
       en: {
         status: "Open sourced",
+        tagline: "AI interviewer",
         epitaph: "It asked great questions. Nobody answered.",
         autopsy:
           "A recruiting assistant with careful loops, buried by a market that wanted fewer interviews, not smarter ones.",
@@ -204,6 +212,7 @@ const products: Product[] = [
       },
       zh: {
         status: "已开源",
+        tagline: "AI 面试官",
         epitaph: "它问了很好的问题。没人回答。",
         autopsy:
           "一款流程细致的招聘助手，最后被一个想要更少面试而不是更聪明面试的市场埋掉。",
@@ -225,6 +234,7 @@ const products: Product[] = [
     copy: {
       en: {
         status: "Open sourced",
+        tagline: "Public-interest AI site",
         epitaph: "AI belonged to everyone. The roadmap belonged to nobody.",
         autopsy:
           "A public-interest AI web project with noble energy and not enough product gravity to stay alive.",
@@ -233,6 +243,7 @@ const products: Product[] = [
       },
       zh: {
         status: "已开源",
+        tagline: "公益 AI 网站",
         epitaph: "AI 属于所有人，路线图不属于任何人。",
         autopsy:
           "一个公共利益 AI 网站项目，志向很正，但产品引力不足，没能继续活下去。",
@@ -254,6 +265,7 @@ const products: Product[] = [
     copy: {
       en: {
         status: "Open sourced",
+        tagline: "Branching story engine",
         epitaph: "The plot was generated. The market was not.",
         autopsy:
           "A story engine that branched into anything except a reason for strangers to return every week.",
@@ -262,6 +274,7 @@ const products: Product[] = [
       },
       zh: {
         status: "已开源",
+        tagline: "剧情生成引擎",
         epitaph: "剧情生成了，市场没有。",
         autopsy:
           "一个故事引擎，可以分叉出任何情节，唯独没长出让陌生人每周回来的理由。",
@@ -283,6 +296,7 @@ const products: Product[] = [
     copy: {
       en: {
         status: "Open sourced",
+        tagline: "Sticker camera",
         epitaph: "Point, shoot, sticker. Nobody stuck around.",
         autopsy:
           "A Polaroid-style camera that turned any moment into a cartoon sticker on web and on-device, yet never turned a cute demo into a reason to keep shooting.",
@@ -291,6 +305,7 @@ const products: Product[] = [
       },
       zh: {
         status: "已开源",
+        tagline: "贴纸相机",
         epitaph: "对准、快门、贴纸，却没黏住一个用户。",
         autopsy:
           "一台拍立得风格的相机，把任意瞬间变成卡通贴纸，网页端和 iOS 端都能玩，却没能把一个可爱的 demo 变成让人一直拍下去的理由。",
@@ -312,6 +327,7 @@ const products: Product[] = [
     copy: {
       en: {
         status: "Open sourced",
+        tagline: "AI personality quiz",
         epitaph: "Sixteen personalities. Zero returning visitors.",
         autopsy:
           "A twelve-question AI-personality quiz that mapped everyone into a tidy four-letter type, then learned self-discovery isn't a habit people repeat.",
@@ -320,6 +336,7 @@ const products: Product[] = [
       },
       zh: {
         status: "已开源",
+        tagline: "AI 人格测试",
         epitaph: "十六种人格，零个回头客。",
         autopsy:
           "一份十二题的 AI 人格测试，把每个人都装进四个字母的整齐格子，最后发现自我认知这件事，大家并不想天天做。",
@@ -341,6 +358,7 @@ const products: Product[] = [
     copy: {
       en: {
         status: "Open sourced",
+        tagline: "AI-flavor scrubber",
         epitaph: "It scrubbed the AI flavor out of your writing. Nobody came back for a second wash.",
         autopsy:
           "A full-stack humanizer — auth, membership tiers, Stripe, an admin panel — all to make AI text sound less like AI. Turns out people run that wash once, not as a habit.",
@@ -349,6 +367,7 @@ const products: Product[] = [
       },
       zh: {
         status: "已开源",
+        tagline: "去 AI 味工具",
         epitaph: "把别人文字里的 AI 味洗干净，却没洗来第二次的用户。",
         autopsy:
           "一整套全栈去味工具：登录、会员分级、Stripe 收款、管理后台样样齐全，只为把 AI 文本改得不像 AI。可惜这道工序大家只走一次，凑不成回头客。",
@@ -582,6 +601,7 @@ export default function GraveyardExperience() {
   const [theme, setTheme] = useState<Theme>("night");
   const [preferencesReady, setPreferencesReady] = useState(false);
   const [activeId, setActiveId] = useState(products[1].id);
+  const [hoverId, setHoverId] = useState<string | null>(null);
   const [consumingId, setConsumingId] = useState<string | null>(null);
   const [buriedIds, setBuriedIds] = useState<Set<string>>(() => new Set());
   const [lastBuriedId, setLastBuriedId] = useState<string | null>(null);
@@ -748,6 +768,12 @@ export default function GraveyardExperience() {
     [activeId],
   );
 
+  const previewProduct = useMemo(
+    () =>
+      products.find((product) => product.id === hoverId) ?? activeProduct,
+    [activeProduct, hoverId],
+  );
+
   const zombiePositionsById = useMemo(
     () => new Map(zombiePositions.map((position) => [position.id, position])),
     [zombiePositions],
@@ -773,11 +799,11 @@ export default function GraveyardExperience() {
   );
 
   const t = copy[language];
-  const activeProductCopy = activeProduct.copy[language];
+  const previewProductCopy = previewProduct.copy[language];
   const buriedCount = buriedIds.size;
   const standingCount = graveCount - buriedCount;
-  const activeIsBuried = buriedIds.has(activeProduct.id);
-  const activeIsConsuming = consumingId === activeProduct.id;
+  const previewIsBuried = buriedIds.has(previewProduct.id);
+  const previewIsConsuming = consumingId === previewProduct.id;
   const lastBuriedProduct = lastBuriedId
     ? products.find((product) => product.id === lastBuriedId)
     : null;
@@ -792,6 +818,7 @@ export default function GraveyardExperience() {
     }
 
     setActiveId(product.id);
+    setHoverId(null);
     setLastBuriedId(null);
     setConsumingId(product.id);
   };
@@ -921,6 +948,7 @@ export default function GraveyardExperience() {
         <aside
           key={activeProduct.id}
           className={styles.dossier}
+          style={{ "--accent": previewProduct.accent } as CSSVars}
           aria-label={t.dossierAria}
         >
           <span className={styles.dossierVines} aria-hidden="true" />
@@ -928,65 +956,66 @@ export default function GraveyardExperience() {
           <div className={styles.dossierTopline}>
             <span>{t.currentGrave}</span>
             <span>
-              {activeIsConsuming
+              {previewIsConsuming
                 ? t.burying
-                : activeIsBuried
+                : previewIsBuried
                   ? t.buried
-                  : activeProductCopy.signal}
+                  : previewProductCopy.signal}
             </span>
           </div>
-          <h2>{activeProduct.name}</h2>
-          {(activeIsConsuming || activeIsBuried) && (
+          <h2>{previewProduct.name}</h2>
+          <p className={styles.dossierTagline}>{previewProductCopy.tagline}</p>
+          {(previewIsConsuming || previewIsBuried) && (
             <p
               className={`${styles.status} ${
-                activeIsConsuming ? styles.statusConsuming : ""
-              } ${activeIsBuried ? styles.statusBuried : ""}`}
+                previewIsConsuming ? styles.statusConsuming : ""
+              } ${previewIsBuried ? styles.statusBuried : ""}`}
             >
-              {activeIsConsuming ? t.dataVinesActive : t.buriedLocally}
+              {previewIsConsuming ? t.dataVinesActive : t.buriedLocally}
             </p>
           )}
-          <p className={styles.epitaph}>{activeProductCopy.epitaph}</p>
-          <p className={styles.autopsy}>{activeProductCopy.autopsy}</p>
+          <p className={styles.epitaph}>{previewProductCopy.epitaph}</p>
+          <p className={styles.autopsy}>{previewProductCopy.autopsy}</p>
           <dl className={styles.facts}>
             <div>
               <dt>{t.born}</dt>
-              <dd>{activeProduct.born}</dd>
+              <dd>{previewProduct.born}</dd>
             </div>
             <div>
               <dt>{t.buriedDate}</dt>
-              <dd>{activeProduct.buried}</dd>
+              <dd>{previewProduct.buried}</dd>
             </div>
           </dl>
           <div className={styles.stack} aria-label={t.stackAria}>
-            {activeProductCopy.stack.map((item) => (
+            {previewProductCopy.stack.map((item) => (
               <span key={item}>{item}</span>
             ))}
           </div>
           <div className={styles.dossierActions}>
             <a
               className={styles.exhume}
-              href={activeProduct.repository}
+              href={previewProduct.repository}
               target="_blank"
               rel="noreferrer"
             >
               {t.exhumeSource}
             </a>
-            {!activeIsBuried && !activeIsConsuming ? (
+            {!previewIsBuried && !previewIsConsuming ? (
               <button
                 className={styles.dossierBuryButton}
-                onClick={() => buryProduct(activeProduct)}
-                aria-label={t.buryProject(activeProduct.name)}
+                onClick={() => buryProduct(previewProduct)}
+                aria-label={t.buryProject(previewProduct.name)}
               >
                 {t.bury}
               </button>
-            ) : activeIsConsuming ? (
+            ) : previewIsConsuming ? (
               <span className={styles.dossierBuryBusy}>{t.burying}</span>
             ) : (
               <button
                 className={styles.dossierBuryDone}
                 type="button"
-                onClick={() => restoreBuriedProduct(activeProduct.id)}
-                aria-label={t.undoBurial(activeProduct.name)}
+                onClick={() => restoreBuriedProduct(previewProduct.id)}
+                aria-label={t.undoBurial(previewProduct.name)}
               >
                 {t.buried}
               </button>
@@ -1012,14 +1041,19 @@ export default function GraveyardExperience() {
             const isBuried = buriedIds.has(product.id);
             const isActive = activeId === product.id;
             const isConsuming = consumingId === product.id;
+            const isHovered = hoverId === product.id;
+            const productCopy = product.copy[language];
 
             return (
               <button
                 key={product.id}
                 className={`${styles.plotNavButton} ${
                   isActive ? styles.plotNavButtonActive : ""
-                } ${isBuried ? styles.plotNavButtonBuried : ""}`}
+                } ${isHovered ? styles.plotNavButtonHover : ""} ${
+                  isBuried ? styles.plotNavButtonBuried : ""
+                }`}
                 type="button"
+                style={{ "--accent": product.accent } as CSSVars}
                 aria-label={
                   isConsuming
                     ? t.projectIsBeingBuried(product.name)
@@ -1027,10 +1061,20 @@ export default function GraveyardExperience() {
                 }
                 aria-pressed={isActive}
                 onClick={() => setActiveId(product.id)}
+                onMouseEnter={() => setHoverId(product.id)}
+                onMouseLeave={() => setHoverId(null)}
+                onFocus={() => setHoverId(product.id)}
+                onBlur={() => setHoverId(null)}
                 disabled={isConsuming}
               >
-                <span>{product.name}</span>
-                <span>{isBuried ? t.buried : product.copy[language].signal}</span>
+                <span className={styles.plotNavAccent} aria-hidden="true" />
+                <span className={styles.plotNavName}>{product.name}</span>
+                <span className={styles.plotNavTagline}>
+                  {isConsuming ? t.burying : productCopy.tagline}
+                </span>
+                <span className={styles.plotNavSignal}>
+                  {isBuried ? t.buried : productCopy.signal}
+                </span>
               </button>
             );
           })}
@@ -1101,6 +1145,7 @@ export default function GraveyardExperience() {
                 const isBuried = product ? buriedIds.has(product.id) : false;
                 const isActive = product ? activeId === product.id : false;
                 const isConsuming = product ? consumingId === product.id : false;
+                const isHovered = product ? hoverId === product.id : false;
                 const productCopy = product?.copy[language];
 
                 return (
@@ -1121,8 +1166,14 @@ export default function GraveyardExperience() {
                         <button
                           className={`${styles.tombstone} ${
                             isActive && !isConsuming ? styles.activeTombstone : ""
-                          } ${isConsuming ? styles.consumingTombstone : ""}`}
+                          } ${isHovered ? styles.hoverTombstone : ""} ${
+                            isConsuming ? styles.consumingTombstone : ""
+                          }`}
                           onClick={() => setActiveId(product.id)}
+                          onMouseEnter={() => setHoverId(product.id)}
+                          onMouseLeave={() => setHoverId(null)}
+                          onFocus={() => setHoverId(product.id)}
+                          onBlur={() => setHoverId(null)}
                           style={{ "--accent": product.accent } as CSSVars}
                           aria-label={
                             isConsuming
@@ -1151,7 +1202,9 @@ export default function GraveyardExperience() {
                           <span className={styles.tombDates}>
                             {product.born} - {product.buried}
                           </span>
-                          <span className={styles.tombEpitaph}>{productCopy.epitaph}</span>
+                          <span className={styles.tombTagline}>
+                            {productCopy.tagline}
+                          </span>
                         </button>
                         <button
                           className={`${styles.buryButton} ${isActive ? styles.buryButtonVisible : ""}`}
@@ -1165,9 +1218,15 @@ export default function GraveyardExperience() {
                       </>
                     ) : product && isBuried ? (
                       <button
-                        className={styles.buriedMarker}
+                        className={`${styles.buriedMarker} ${
+                          isHovered ? styles.buriedMarkerHover : ""
+                        }`}
                         type="button"
                         onClick={() => restoreBuriedProduct(product.id)}
+                        onMouseEnter={() => setHoverId(product.id)}
+                        onMouseLeave={() => setHoverId(null)}
+                        onFocus={() => setHoverId(product.id)}
+                        onBlur={() => setHoverId(null)}
                         aria-label={t.undoBurial(product.name)}
                       >
                         <span className={styles.ashMound} aria-hidden="true" />
