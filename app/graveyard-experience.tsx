@@ -375,6 +375,37 @@ const products: Product[] = [
       },
     },
   },
+  {
+    id: "ai-reset",
+    name: "ai-reset",
+    repository: "https://github.com/ai-graveyard/ai-reset",
+    born: "2026.07",
+    buried: "2026.07",
+    lane: "3",
+    plot: "1",
+    accent: "#ff5c5c",
+    plant: "sprout",
+    copy: {
+      en: {
+        status: "Open sourced",
+        tagline: "Quota reset tracker",
+        epitaph: "It watched every quota reset. Nobody was watching back.",
+        autopsy:
+          "An email alert system that verified official quota-reset announcements for Codex and Claude Code and refused to fire on rumors, but couldn't compete with a habit of just checking X for good news.",
+        stack: ["Next.js", "SQLite", "Resend"],
+        signal: "0 stars",
+      },
+      zh: {
+        status: "已开源",
+        tagline: "配额重置提醒",
+        epitaph: "它盯紧了每一次配额重置，却没人盯着它。",
+        autopsy:
+          "一套邮件提醒系统，专门核实 Codex 和 Claude Code 的官方配额重置公告，拒绝为谣言发信，却还是没能替代大家刷 X 等好消息的习惯。",
+        stack: ["Next.js", "SQLite", "Resend"],
+        signal: "0 星标",
+      },
+    },
+  },
 ];
 
 const copy: Record<Language, SiteCopy> = {
@@ -448,7 +479,7 @@ const copy: Record<Language, SiteCopy> = {
 };
 
 const graveyardYears = ["2025", "2026"];
-const plots = ["1", "2", "3", "4", "5", "6"];
+const plots = ["1", "2", "3", "4", "5"];
 const graveCount = products.length;
 const buryAnimationMs = 1450;
 const productIds = new Set(products.map((product) => product.id));
@@ -828,21 +859,38 @@ export default function GraveyardExperience() {
     [zombiePositions],
   );
 
-  const occupiedPlots = useMemo(
+  const boardLayout = useMemo(
     () => {
-      const plotsByYear = new Map<string, Product>();
+      const occupiedPlots = new Map<string, Product>();
+      const yearRows = new Map<string, { start: number; span: number }>();
+      const rows: { year: string; globalRow: number }[] = [];
+      let rowCursor = 0;
 
       for (const year of graveyardYears) {
         const productsInYear = products
           .filter((product) => getProductYear(product) === year)
           .sort(compareProductsByBorn);
 
-        productsInYear.slice(0, plots.length).forEach((product, plotIndex) => {
-          plotsByYear.set(`${year}-${plots[plotIndex]}`, product);
-        });
+        const rowsInYear = Math.max(
+          1,
+          Math.ceil(productsInYear.length / plots.length),
+        );
+
+        yearRows.set(year, { start: rowCursor + 1, span: rowsInYear });
+
+        for (let rowInYear = 0; rowInYear < rowsInYear; rowInYear += 1) {
+          rowCursor += 1;
+          rows.push({ year, globalRow: rowCursor });
+
+          productsInYear
+            .slice(rowInYear * plots.length, (rowInYear + 1) * plots.length)
+            .forEach((product, plotIndex) => {
+              occupiedPlots.set(`${rowCursor}-${plots[plotIndex]}`, product);
+            });
+        }
       }
 
-      return plotsByYear;
+      return { occupiedPlots, yearRows, rows, totalRows: rowCursor };
     },
     [],
   );
@@ -1092,7 +1140,11 @@ export default function GraveyardExperience() {
         </div>
 
         <div className={styles.boardScroll}>
-          <div className={styles.board} onClick={moveZombiesToClick}>
+          <div
+            className={styles.board}
+            onClick={moveZombiesToClick}
+            style={{ "--board-rows": String(boardLayout.totalRows) } as CSSVars}
+          >
             <div className={styles.fence} aria-hidden="true" />
             <div className={styles.zombieLayer} aria-hidden="true">
               {roamingZombies.map((zombie) => {
@@ -1128,8 +1180,13 @@ export default function GraveyardExperience() {
                 );
               })}
             </div>
-            {graveyardYears.map((year, yearIndex) => {
+            {graveyardYears.map((year) => {
               const isRaisedYear = year === "2026";
+              const rowInfo = boardLayout.yearRows.get(year);
+
+              if (!rowInfo) {
+                return null;
+              }
 
               return (
                 <div
@@ -1137,7 +1194,10 @@ export default function GraveyardExperience() {
                   className={`${styles.yearSign} ${isRaisedYear ? styles.raisedYearRow : ""}`}
                   style={
                     {
-                      "--year-row": String(yearIndex + 1),
+                      "--year-row":
+                        rowInfo.span > 1
+                          ? `${rowInfo.start} / span ${rowInfo.span}`
+                          : String(rowInfo.start),
                       zIndex: isRaisedYear ? 8 : 6,
                     } as CSSVars
                   }
@@ -1148,10 +1208,10 @@ export default function GraveyardExperience() {
                 </div>
               );
             })}
-            {graveyardYears.map((year, yearIndex) =>
+            {boardLayout.rows.map(({ year, globalRow }) =>
               plots.map((plot) => {
-                const product = occupiedPlots.get(`${year}-${plot}`);
-                const yearRow = String(yearIndex + 1);
+                const product = boardLayout.occupiedPlots.get(`${globalRow}-${plot}`);
+                const yearRow = String(globalRow);
                 const isRaisedYear = year === "2026";
                 const isBuried = product ? buriedIds.has(product.id) : false;
                 const isActive = product ? activeId === product.id : false;
@@ -1161,7 +1221,7 @@ export default function GraveyardExperience() {
 
                 return (
                   <div
-                    key={`${year}-${plot}`}
+                    key={`${globalRow}-${plot}`}
                     className={`${styles.plot} ${isRaisedYear ? styles.raisedYearRow : ""}`}
                     style={
                       {
