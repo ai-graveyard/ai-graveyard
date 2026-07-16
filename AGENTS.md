@@ -42,7 +42,7 @@ public/                           # Static SVG assets
 - The "bury" animation runs for exactly `1450ms` (`buryAnimationMs`), controlled by a `setTimeout`.
 - CSS custom properties (`--lane`, `--plot`, `--accent`) are used for grid placement and per-tombstone accent colors.
 - The cemetery grid is 3 lanes × 5 plots; not all cells are occupied.
-- The dossier panel previews whatever is hovered (`hoverId` — tombstones, buried mounds, and almanac cards all set it on mouseenter/focus) and falls back to the clicked selection (`activeId`) on mouseleave/blur. Hovering an almanac card also lifts + glows the matching tombstone (`.hoverTombstone`).
+- The dossier panel previews whatever is hovered (`hoverId` — tombstones and buried mounds set it on mouseenter/focus) and falls back to the clicked selection (`activeId`) on mouseleave/blur. The hovered tombstone also lifts + glows (`.hoverTombstone`).
 
 ## Adding a new product
 
@@ -68,7 +68,7 @@ Add an entry to the `products` array in `app/graveyard-experience.tsx`:
 
 Make sure `lane`+`plot` is not already occupied by another product.
 
-`tagline` is the short "what is this" label (e.g. "Sticker camera" / "贴纸相机"). It is always visible on the tombstone plaque and in the almanac card bar above the graveyard, so keep it to a few words; the witty `epitaph` only shows in the dossier panel.
+`tagline` is the short "what is this" label (e.g. "Sticker camera" / "贴纸相机"). It is always visible on the tombstone plaque, so keep it to a few words; the witty `epitaph` only shows in the dossier panel.
 
 ## i18n
 

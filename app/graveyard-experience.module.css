@@ -275,25 +275,12 @@
   text-shadow: 3px 3px 0 #12204a;
 }
 
-.logoPixels {
-  position: relative;
-  width: 1.5rem;
-  height: 1.5rem;
-  background: #9cff6d;
-  box-shadow:
-    0 0 0 4px #143a25,
-    4px 4px 0 #ffcf4a,
-    8px -4px 0 #ff7f61;
-}
-
-.logoPixels::after {
-  content: "";
-  position: absolute;
-  left: 0.5rem;
-  top: -0.55rem;
-  width: 0.5rem;
-  height: 0.5rem;
-  background: #9cff6d;
+.logo {
+  width: 2.1rem;
+  height: 2.1rem;
+  image-rendering: pixelated;
+  border: 4px solid #2f2347;
+  box-shadow: 4px 4px 0 #15142f;
 }
 
 .headerActions {
@@ -440,6 +427,114 @@
   line-height: 1.5;
   overflow-wrap: anywhere;
   text-shadow: 2px 2px 0 rgba(18, 32, 74, 0.7);
+}
+
+.memorial {
+  position: relative;
+  width: max-content;
+  margin: 2rem 0 0 1.4rem;
+}
+
+.memorialFrame {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: max-content;
+  padding: 0.45rem;
+  border: 4px solid #2f2347;
+  background: linear-gradient(180deg, #a5713f, #7c4e28);
+  box-shadow:
+    8px 8px 0 #15142f,
+    inset 0 0 0 4px rgba(255, 255, 255, 0.22);
+}
+
+.memorialArt {
+  display: block;
+  width: 10.5rem;
+  height: 10.5rem;
+  border: 4px solid #2f2347;
+  image-rendering: pixelated;
+  animation: memorialGlow 3.4s steps(3, end) infinite;
+}
+
+.memorialLegs {
+  position: relative;
+  z-index: 1;
+  display: block;
+  height: 1.7rem;
+  margin-top: -4px;
+}
+
+.memorialLegs::before,
+.memorialLegs::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: -0.55rem;
+  width: 0.95rem;
+  border: 4px solid #2f2347;
+  border-top: 0;
+  background: linear-gradient(180deg, #8a5a34, #6b4222);
+}
+
+.memorialLegs::before {
+  left: 20%;
+}
+
+.memorialLegs::after {
+  right: 20%;
+  box-shadow: 4px 4px 0 #15142f;
+}
+
+.memorialGround {
+  position: relative;
+  z-index: 3;
+  display: block;
+  width: calc(100% + 2.6rem);
+  height: 1.05rem;
+  margin-left: -1.3rem;
+  border: 4px solid #2f2347;
+  background: linear-gradient(180deg, #2c7a47, #205934);
+  box-shadow: 4px 4px 0 #15142f;
+}
+
+.memorialGround::before {
+  content: "";
+  position: absolute;
+  left: 12%;
+  top: -0.5rem;
+  width: 0.45rem;
+  height: 0.5rem;
+  background: #2c7a47;
+  box-shadow:
+    0.65rem -0.2rem 0 #2c7a47,
+    5.4rem -0.1rem 0 #2c7a47,
+    10.6rem -0.25rem 0 #2c7a47,
+    11.3rem 0 0 #2c7a47;
+}
+
+.memorialGround::after {
+  content: "";
+  position: absolute;
+  right: 16%;
+  top: -0.95rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  background: #ff9bd4;
+  box-shadow:
+    0 0.45rem 0 #2c7a47,
+    -0.45rem 0.1rem 0 #ff9bd4,
+    0.45rem 0.1rem 0 #ff9bd4;
+}
+
+@keyframes memorialGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0.35rem rgba(103, 232, 249, 0.16);
+  }
+  50% {
+    box-shadow: 0 0 1.3rem rgba(103, 232, 249, 0.38);
+  }
 }
 
 .dossier,
@@ -777,99 +872,6 @@
   width: min(1180px, calc(100% - 2rem));
   margin: 0 auto;
   padding: 0 0 1.5rem;
-}
-
-.plotNav {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
-  gap: 0.55rem;
-  margin: 0 0 0.85rem;
-}
-
-.plotNavButton {
-  position: relative;
-  min-width: 0;
-  border: 4px solid #2f2347;
-  background: #fff7d6;
-  box-shadow: 4px 4px 0 #15142f;
-  color: #251f21;
-  cursor: pointer;
-  font-family: inherit;
-  padding: 0.74rem 0.6rem 0.52rem;
-  text-align: left;
-  transition:
-    background 120ms steps(2, end),
-    box-shadow 120ms steps(2, end),
-    transform 120ms steps(2, end);
-}
-
-.plotNavAccent {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 0.36rem;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.45) 0 8px, transparent 8px 100%),
-    repeating-linear-gradient(90deg, rgba(21, 20, 47, 0.16) 0 2px, transparent 2px 8px),
-    var(--accent, #ffcf4a);
-}
-
-.plotNavName {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 0.72rem;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.plotNavTagline {
-  display: block;
-  margin-top: 0.22rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: #4c3f45;
-  font-family: var(--font-geist-sans), Arial, sans-serif;
-  font-size: 0.66rem;
-  font-weight: 700;
-}
-
-.plotNavSignal {
-  display: block;
-  margin-top: 0.26rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: #6c2b2f;
-  font-size: 0.56rem;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.plotNavButton:hover,
-.plotNavButton:focus-visible,
-.plotNavButtonHover,
-.plotNavButtonActive {
-  outline: 0;
-  background: #ffcf4a;
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 #15142f;
-}
-
-.plotNavButtonBuried {
-  background: #b8b0a6;
-  color: #332a2e;
-}
-
-.plotNavButtonBuried .plotNavAccent {
-  filter: saturate(0.35);
-}
-
-.plotNavButton:disabled {
-  cursor: wait;
 }
 
 .boardScroll {
@@ -1849,6 +1851,41 @@
   text-shadow: 3px 3px 0 #1d3e6d;
 }
 
+.scene[data-theme="day"] .memorialFrame {
+  background: linear-gradient(180deg, #c08a52, #96613a);
+}
+
+.scene[data-theme="day"] .memorialArt {
+  filter: brightness(1.07) saturate(1.04);
+  animation: none;
+  box-shadow: 0 0 0.4rem rgba(31, 79, 125, 0.18);
+}
+
+.scene[data-theme="day"] .memorialLegs::before,
+.scene[data-theme="day"] .memorialLegs::after {
+  background: linear-gradient(180deg, #a5713f, #7c4e28);
+}
+
+.scene[data-theme="day"] .memorialGround {
+  background: linear-gradient(180deg, #65bd5d, #3f944f);
+}
+
+.scene[data-theme="day"] .memorialGround::before {
+  background: #4aa64f;
+  box-shadow:
+    0.65rem -0.2rem 0 #4aa64f,
+    5.4rem -0.1rem 0 #4aa64f,
+    10.6rem -0.25rem 0 #4aa64f,
+    11.3rem 0 0 #4aa64f;
+}
+
+.scene[data-theme="day"] .memorialGround::after {
+  box-shadow:
+    0 0.45rem 0 #4aa64f,
+    -0.45rem 0.1rem 0 #ff9bd4,
+    0.45rem 0.1rem 0 #ff9bd4;
+}
+
 .scene[data-theme="day"] .title {
   color: #253056;
   text-shadow:
@@ -2285,6 +2322,10 @@
     padding-top: 3rem;
   }
 
+  .memorial {
+    display: none;
+  }
+
   .title {
     font-size: 4.5rem;
   }
@@ -2421,13 +2462,6 @@
     text-align: center;
   }
 
-  .plotNav {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.55rem;
-    margin: 0 0 0.85rem;
-  }
-
   .boardScroll {
     margin-right: -0.625rem;
     overflow-x: auto;
@@ -2489,6 +2523,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .memorialArt,
   .cloud,
   .starOne,
   .starTwo,

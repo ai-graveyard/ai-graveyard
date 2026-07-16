@@ -81,7 +81,6 @@ type SiteCopy = {
   night: string;
   day: string;
   bury: string;
-  plotNavAria: string;
   gravesStat: (count: number) => string;
   standingStat: (count: number) => string;
   buriedStat: (count: number) => string;
@@ -404,7 +403,6 @@ const copy: Record<Language, SiteCopy> = {
     night: "Night",
     day: "Day",
     bury: "Bury",
-    plotNavAria: "Project selector",
     gravesStat: (count) => `${count} graves`,
     standingStat: (count) => `${count} standing`,
     buriedStat: (count) => `${count} buried`,
@@ -438,7 +436,6 @@ const copy: Record<Language, SiteCopy> = {
     night: "夜晚",
     day: "白天",
     bury: "埋葬",
-    plotNavAria: "项目选择器",
     gravesStat: (count) => `${count} 座墓`,
     standingStat: (count) => `${count} 座还站着`,
     buriedStat: (count) => `${count} 座已埋`,
@@ -887,7 +884,7 @@ export default function GraveyardExperience() {
 
       <header className={styles.header}>
         <a className={styles.brand} href="https://github.com/ai-graveyard">
-          <span className={styles.logoPixels} aria-hidden="true" />
+          <img className={styles.logo} src="/logo.png" alt="" width={200} height={200} />
           AI Graveyard
         </a>
         <div className={styles.headerActions}>
@@ -943,6 +940,19 @@ export default function GraveyardExperience() {
             AI Graveyard
           </h1>
           <p className={styles.subtitle}>{t.subtitle}</p>
+          <figure className={styles.memorial} aria-hidden="true">
+            <span className={styles.memorialFrame}>
+              <img
+                className={styles.memorialArt}
+                src="/logo.png"
+                alt=""
+                width={200}
+                height={200}
+              />
+            </span>
+            <span className={styles.memorialLegs} />
+            <span className={styles.memorialGround} />
+          </figure>
         </div>
 
         <aside
@@ -1034,50 +1044,6 @@ export default function GraveyardExperience() {
               {t.undoBurial(lastBuriedProduct.name)}
             </button>
           ) : null}
-        </div>
-
-        <div className={styles.plotNav} aria-label={t.plotNavAria}>
-          {products.map((product) => {
-            const isBuried = buriedIds.has(product.id);
-            const isActive = activeId === product.id;
-            const isConsuming = consumingId === product.id;
-            const isHovered = hoverId === product.id;
-            const productCopy = product.copy[language];
-
-            return (
-              <button
-                key={product.id}
-                className={`${styles.plotNavButton} ${
-                  isActive ? styles.plotNavButtonActive : ""
-                } ${isHovered ? styles.plotNavButtonHover : ""} ${
-                  isBuried ? styles.plotNavButtonBuried : ""
-                }`}
-                type="button"
-                style={{ "--accent": product.accent } as CSSVars}
-                aria-label={
-                  isConsuming
-                    ? t.projectIsBeingBuried(product.name)
-                    : t.selectProject(product.name)
-                }
-                aria-pressed={isActive}
-                onClick={() => setActiveId(product.id)}
-                onMouseEnter={() => setHoverId(product.id)}
-                onMouseLeave={() => setHoverId(null)}
-                onFocus={() => setHoverId(product.id)}
-                onBlur={() => setHoverId(null)}
-                disabled={isConsuming}
-              >
-                <span className={styles.plotNavAccent} aria-hidden="true" />
-                <span className={styles.plotNavName}>{product.name}</span>
-                <span className={styles.plotNavTagline}>
-                  {isConsuming ? t.burying : productCopy.tagline}
-                </span>
-                <span className={styles.plotNavSignal}>
-                  {isBuried ? t.buried : productCopy.signal}
-                </span>
-              </button>
-            );
-          })}
         </div>
 
         <div className={styles.boardScroll}>
