@@ -406,6 +406,37 @@ const products: Product[] = [
       },
     },
   },
+  {
+    id: "we-match",
+    name: "we-match",
+    repository: "https://github.com/ai-graveyard/we-match",
+    born: "2026.08",
+    buried: "2026.08",
+    lane: "3",
+    plot: "2",
+    accent: "#c2f24d",
+    plant: "chipflower",
+    copy: {
+      en: {
+        status: "Open sourced",
+        tagline: "Needs-and-offers board",
+        epitaph: "Ready to introduce everyone to everyone. Almost nobody walked in.",
+        autopsy:
+          "One card per person, a public square for “I need” and “I offer”, SMS login, a single-file SQLite box you can self-host, even an open API and an agent skill. Matching needs both sides of the market to show up; only the builder did.",
+        stack: ["Next.js", "SQLite", "Matchmaking"],
+        signal: "0 stars",
+      },
+      zh: {
+        status: "已开源",
+        tagline: "供需匹配广场",
+        epitaph: "它准备好替所有人牵线，可进门的没几个。",
+        autopsy:
+          "每人一张名片，把「我需要 / 我提供」挂到公开广场，短信登录、单文件 SQLite、开放 API、Agent Skill 一样不缺。可匹配这件事要供需两头都有人，最后到场的只有作者自己。",
+        stack: ["Next.js", "SQLite", "供需匹配"],
+        signal: "0 星标",
+      },
+    },
+  },
 ];
 
 const copy: Record<Language, SiteCopy> = {
