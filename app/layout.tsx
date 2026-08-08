@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ai-graveyard.github.io";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ai-graveyard.v2ai.org";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
