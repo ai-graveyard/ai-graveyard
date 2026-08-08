@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Graveyard
 
-## Getting Started
+像素风单页网站，纪念那些错过 PMF、最终选择开源的 AI 产品。逛墓园、翻档案、把项目埋葬或复活。
 
-First, run the development server:
+线上地址：<https://ai-graveyard.v2ai.org>
+
+## 技术栈
+
+Next.js 16（App Router）· React 19 · TypeScript 5 · Tailwind CSS v4 · CSS Modules · pnpm
+
+## 本地开发
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+pnpm dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+打开 <http://localhost:3000>。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 构建
 
-## Learn More
+```bash
+pnpm build
+```
 
-To learn more about Next.js, take a look at the following resources:
+`next.config.ts` 里配了 `output: "export"`，构建产物是纯静态文件，全部落在 `out/`。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+因为没有服务端运行时，`pnpm start`（`next start`）在本项目里跑不起来。要预览构建产物，用任意静态服务器：
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dlx serve out
+```
 
-## Deploy on Vercel
+## 部署
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+托管在 GitHub Pages，推送到 `main` 即自动发布，不需要任何 secret。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `.github/workflows/nextjs.yml`：在 runner 上 `pnpm build`，把 `out/` 作为 Pages artifact 上传并部署。
+- `.github/workflows/ci.yml`：push 和 PR 上跑 `tsc --noEmit`、`pnpm lint`、`pnpm build`。
+
+两个前提，缺一不可：
+
+- 仓库 Settings → Pages 的 Source 必须是 **GitHub Actions**，否则部署 job 直接失败。
+- 自定义域名写在 `public/CNAME` 里，静态导出会把它拷进 `out/CNAME`。删掉它，站点会退回 `github.io` 子路径，所有资源 URL 都会失效。
+
+站点地址默认 `https://ai-graveyard.v2ai.org`，可用 `NEXT_PUBLIC_SITE_URL` 覆盖。
+
+## 添加一座墓碑
+
+所有产品数据硬编码在 [`app/graveyard-experience.tsx`](app/graveyard-experience.tsx) 的 `products` 数组里，字段含义和注意事项见 [AGENTS.md](AGENTS.md)。
+
+## 其他文档
+
+- [AGENTS.md](AGENTS.md) — 给 AI 编码助手看的项目约定
+- [PRD.md](PRD.md) — 产品需求
+
+## License
+
+MIT，见 [LICENSE](LICENSE)。
