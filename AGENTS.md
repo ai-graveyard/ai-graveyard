@@ -85,6 +85,8 @@ Two languages: `"en"` (default) and `"zh"`. All user-visible strings live in the
 
 Two themes: `"night"` (default) and `"day"`. Theme is toggled via a segmented control and stored in `localStorage`. Day-mode overrides are all scoped to `.scene[data-theme="day"]` in the CSS module.
 
+The dossier and the scoreboard share a surface that has to work on both a dark sky and a bright one, so every colour inside them comes from a `--paper-*` token instead of a literal: `--paper` (surface), `--paper-line` (outlines), `--paper-rule` (dividers *inside* the panel, which need to be lighter than the surface at night, not darker), `--paper-drop` / `--paper-sheen` / `--paper-frame`, the chip fills (`--paper-chip`, `--paper-chip-lit`, `--paper-chip-muted` + `-ink`, `--paper-chip-drop`) and the ink (`--paper-ink`, `--paper-ink-soft`, `--paper-body`, `--paper-epitaph`, `--paper-dust-a/b/c`). The base set on `.dossier, .scoreboard` is night — a moonlit slate plaque — and `.scene[data-theme="day"] .dossier, …` swaps in the sunlit parchment set. Anything new inside the panel should reach for a token, otherwise it is only readable in one theme. Chips that are saturated in both themes (green `bury`, cyan `stack` / `consuming`, orange `exhume`) keep their literal fill and their own dark ink.
+
 ## Deployment
 
 - Site URL defaults to `https://ai-graveyard.v2ai.org` (override via `NEXT_PUBLIC_SITE_URL`).

@@ -251,7 +251,7 @@
   z-index: 30;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   flex-wrap: wrap;
   gap: 0.6rem;
   width: min(1180px, calc(100% - 2rem));
@@ -259,20 +259,10 @@
   padding: 1.1rem 0 0;
 }
 
-.brand,
 .nav a,
 .exhume {
   color: inherit;
   text-decoration: none;
-}
-
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 1rem;
-  font-weight: 900;
-  text-shadow: 3px 3px 0 #12204a;
 }
 
 .pixelTombstone {
@@ -385,7 +375,9 @@
   align-items: start;
   width: min(1180px, calc(100% - 2rem));
   margin: 0 auto;
-  padding: 2.6rem 0 1.8rem;
+  /* The header lost its wordmark, so the title block moves up to close the gap
+     under the toolbar — keeps the first row of graves higher on screen. */
+  padding: 1.3rem 0 1.8rem;
 }
 
 /* The dossier moved down beside the board, so the title block and the memorial
@@ -399,8 +391,17 @@
   max-width: 100%;
 }
 
+/* The left column rides up into the strip the wordmark used to occupy, filling
+   the empty half of the toolbar row. It leaves `.marquee` (and so the memorial
+   on the right, which would otherwise collide with the toolbar buttons) alone:
+   `align-self: start` detaches it from the row's bottom alignment, and the
+   negative margin does not feed back into the row height because the memorial
+   is the taller column. Reset below 860px, where the memorial is hidden and
+   this column is already flush with the top. */
 .marqueeText {
   max-width: 47rem;
+  align-self: start;
+  margin-top: -1.5rem;
 }
 
 .eyebrow {
@@ -549,14 +550,49 @@
   }
 }
 
+/* The dossier and the scoreboard are the only panels that sit on their own
+   surface, so every colour inside them comes from these tokens instead of a
+   literal. The base set is night — a moonlit slate plaque — and
+   `.scene[data-theme="day"]` swaps in the sunlit parchment set further down.
+   Anything added inside the panel should reach for a token, otherwise it will
+   only be readable in one of the two themes. */
 .dossier,
 .scoreboard {
-  border: 4px solid #2f2347;
-  background: #f6d78f;
+  /* Surface + frame */
+  --paper:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 4px, transparent 4px 100%) 0 0 / 16px 100%,
+    linear-gradient(180deg, #372e59 0%, #2b2446 52%, #221c3a 100%);
+  --paper-line: #17122e;
+  /* Divider inside the panel — unlike `--paper-line` it has the surface on both
+     sides, so at night it has to be lighter than the panel, not darker. */
+  --paper-rule: #574a86;
+  --paper-drop: #0d0a1e;
+  --paper-sheen: rgba(196, 214, 255, 0.16);
+  --paper-frame: rgba(206, 196, 255, 0.24);
+  /* Chips carved into / raised off the surface */
+  --paper-chip: #3b3260;
+  --paper-chip-lit: #473b73;
+  --paper-chip-drop: #16122c;
+  /* Dead/settled state chips ("buried"). Stone grey, so it has to move with
+     the surface or it glares on the night plaque. */
+  --paper-chip-muted: #6f6689;
+  --paper-chip-muted-ink: #17122e;
+  /* Ink */
+  --paper-ink: #ece7f7;
+  --paper-ink-soft: #b3a6dd;
+  --paper-body: #d3cbe8;
+  --paper-epitaph: #ffb3a1;
+  /* Dust puff along the bottom edge — must sit lighter than the surface */
+  --paper-dust-a: #8a80b4;
+  --paper-dust-b: #6e6496;
+  --paper-dust-c: #57507f;
+
+  border: 4px solid var(--paper-line);
+  background: var(--paper);
   box-shadow:
-    8px 8px 0 #15142f,
-    inset 0 0 0 4px rgba(255, 255, 255, 0.28);
-  color: #251f21;
+    8px 8px 0 var(--paper-drop),
+    inset 0 0 0 4px var(--paper-sheen);
+  color: var(--paper-ink);
 }
 
 .dossier {
@@ -577,45 +613,57 @@
   animation: dossierSelect 380ms steps(5, end);
 }
 
-/* Only shown once the panel docks to the bottom edge on narrow screens. */
+/* Only shown once the panel docks to the bottom edge on narrow screens.
+   No frame and no fill — just the pixel cross sitting on the paper, so it
+   never competes with the dossier for attention. */
 .dossierClose {
   display: none;
   position: absolute;
-  right: 0.5rem;
-  top: 0.5rem;
+  right: 0.45rem;
+  top: 0.45rem;
   z-index: 3;
+  box-sizing: border-box;
   width: 1.75rem;
   height: 1.75rem;
-  border: 3px solid #2f2347;
+  border: 0;
   padding: 0;
-  background: #ff8a6a;
-  box-shadow: 3px 3px 0 #15142f;
+  background: transparent;
+  color: var(--paper-ink-soft);
   cursor: pointer;
-  transition:
-    transform 120ms steps(2, end),
-    box-shadow 120ms steps(2, end);
+  transition: color 120ms steps(2, end);
 }
 
+/* Nine 4px blocks on a 5×5 grid: one in the middle, two out along each
+   diagonal arm. Straight pixel diagonals, no rotated bars to soften. */
 .dossierClose span {
   position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(45deg, transparent 0 40%, #2f2347 40% 60%, transparent 60% 100%),
-    linear-gradient(-45deg, transparent 0 40%, #2f2347 40% 60%, transparent 60% 100%);
+  left: 4px;
+  top: 4px;
+  width: 4px;
+  height: 4px;
+  background: currentColor;
+  box-shadow:
+    16px 0 0,
+    4px 4px 0,
+    12px 4px 0,
+    8px 8px 0,
+    4px 12px 0,
+    12px 12px 0,
+    0 16px 0,
+    16px 16px 0;
 }
 
 .dossierClose:hover,
 .dossierClose:focus-visible {
   outline: 0;
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 #15142f;
+  color: var(--paper-ink);
 }
 
 .dossier::before {
   content: "";
   position: absolute;
   inset: 0.45rem;
-  border: 2px dashed rgba(47, 35, 71, 0.28);
+  border: 2px dashed var(--paper-frame);
   pointer-events: none;
 }
 
@@ -680,14 +728,14 @@
   z-index: 5;
   width: 0.45rem;
   height: 0.45rem;
-  background: #e8dfc8;
+  background: var(--paper-dust-a);
   box-shadow:
-    2.5rem 0 0 #d4c9aa,
-    5rem -0.15rem 0 #e8dfc8,
-    7.8rem 0.1rem 0 #c8b98f,
-    10.5rem -0.1rem 0 #d4c9aa,
-    13.2rem 0.05rem 0 #e8dfc8,
-    16rem -0.15rem 0 #c8b98f;
+    2.5rem 0 0 var(--paper-dust-b),
+    5rem -0.15rem 0 var(--paper-dust-a),
+    7.8rem 0.1rem 0 var(--paper-dust-c),
+    10.5rem -0.1rem 0 var(--paper-dust-b),
+    13.2rem 0.05rem 0 var(--paper-dust-a),
+    16rem -0.15rem 0 var(--paper-dust-c);
   opacity: 0;
   pointer-events: none;
   image-rendering: pixelated;
@@ -700,9 +748,9 @@
   display: flex;
   justify-content: space-between;
   gap: 0.5rem;
-  border-bottom: 3px solid #2f2347;
+  border-bottom: 3px solid var(--paper-rule);
   padding-bottom: 0.4rem;
-  color: #5c3b23;
+  color: var(--paper-ink-soft);
   font-size: 0.76rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -712,7 +760,7 @@
   position: relative;
   z-index: 1;
   margin: 0.45rem 0 0;
-  color: #251f21;
+  color: var(--paper-ink);
   font-size: 1.6rem;
   font-weight: 900;
   line-height: 1.05;
@@ -738,12 +786,12 @@
   z-index: 1;
   display: inline-block;
   margin: 0.35rem 0 0;
-  border: 3px solid #2f2347;
-  background: #fff2c4;
+  border: 3px solid var(--paper-line);
+  background: var(--paper-chip-lit);
   box-shadow:
-    3px 3px 0 #b57935,
+    3px 3px 0 var(--paper-chip-drop),
     inset 0 -3px 0 var(--accent, #ffcf4a);
-  color: #4a3320;
+  color: var(--paper-ink);
   padding: 0.22rem 0.46rem 0.3rem;
   font-size: 0.74rem;
   font-weight: 900;
@@ -755,9 +803,9 @@
   z-index: 1;
   display: inline-block;
   margin: 0.3rem 0 0;
-  border: 3px solid #2f2347;
+  border: 3px solid var(--paper-line);
   background: #44d17a;
-  box-shadow: 3px 3px 0 #b57935;
+  box-shadow: 3px 3px 0 var(--paper-chip-drop);
   color: #102719;
   padding: 0.28rem 0.52rem;
   font-size: 0.78rem;
@@ -770,8 +818,8 @@
 }
 
 .statusBuried {
-  background: #b8b0a6;
-  color: #332a2e;
+  background: var(--paper-chip-muted);
+  color: var(--paper-chip-muted-ink);
 }
 
 .epitaph,
@@ -783,14 +831,14 @@
 }
 
 .epitaph {
-  color: #6c2b2f;
+  color: var(--paper-epitaph);
   font-size: 0.9rem;
   font-weight: 900;
   line-height: 1.35;
 }
 
 .autopsy {
-  color: #3a2b2f;
+  color: var(--paper-body);
   font-family: var(--font-geist-sans), Arial, sans-serif;
   font-size: 0.9rem;
   line-height: 1.45;
@@ -806,13 +854,13 @@
 }
 
 .facts div {
-  border: 3px solid #2f2347;
-  background: #fff7d6;
+  border: 3px solid var(--paper-line);
+  background: var(--paper-chip);
   padding: 0.35rem 0.45rem;
 }
 
 .facts dt {
-  color: #805235;
+  color: var(--paper-ink-soft);
   font-size: 0.72rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -820,7 +868,7 @@
 
 .facts dd {
   margin: 0.15rem 0 0;
-  color: #251f21;
+  color: var(--paper-ink);
   font-size: 0.88rem;
   font-weight: 900;
 }
@@ -835,9 +883,9 @@
 }
 
 .stack span {
-  border: 3px solid #2f2347;
+  border: 3px solid var(--paper-line);
   background: #a5e4ff;
-  box-shadow: 3px 3px 0 #15142f;
+  box-shadow: 3px 3px 0 var(--paper-chip-drop);
   color: #15243d;
   padding: 0.26rem 0.48rem;
   font-size: 0.74rem;
@@ -859,7 +907,7 @@
   align-items: center;
   justify-content: center;
   min-height: 2.4rem;
-  border: 4px solid #2f2347;
+  border: 4px solid var(--paper-line);
   background: #ff7f61;
   box-shadow: 5px 5px 0 #15142f;
   color: #251f21;
@@ -875,7 +923,7 @@
   justify-content: center;
   min-height: 2.4rem;
   padding: 0 0.75rem;
-  border: 4px solid #2f2347;
+  border: 4px solid var(--paper-line);
   background: #9cff6d;
   box-shadow: 5px 5px 0 #15142f;
   color: #102719;
@@ -902,7 +950,7 @@
   justify-content: center;
   min-height: 2.4rem;
   padding: 0 0.75rem;
-  border: 4px solid #2f2347;
+  border: 4px solid var(--paper-line);
   font-size: 0.88rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -915,8 +963,8 @@
 }
 
 .dossierBuryDone {
-  background: #b8b0a6;
-  color: #332a2e;
+  background: var(--paper-chip-muted);
+  color: var(--paper-chip-muted-ink);
   cursor: pointer;
   font-family: inherit;
   transition: transform 120ms steps(2, end), box-shadow 120ms steps(2, end);
@@ -964,16 +1012,18 @@
 
 .scoreboard span,
 .undoBurial {
-  border: 3px solid #2f2347;
-  background: #fff7d6;
-  color: #251f21;
+  border: 3px solid var(--paper-line);
+  background: var(--paper-chip);
+  color: var(--paper-ink);
   padding: 0.22rem 0.42rem;
   font-size: 0.66rem;
   font-weight: 900;
 }
 
+/* Green chip in both themes, so its ink is fixed rather than tokenised. */
 .undoBurial {
   background: #9cff6d;
+  color: #102719;
   box-shadow: 3px 3px 0 #15142f;
   cursor: pointer;
   font-family: inherit;
@@ -2018,11 +2068,6 @@
   animation: none;
 }
 
-.scene[data-theme="day"] .brand {
-  color: #fff7d6;
-  text-shadow: 3px 3px 0 #1d3e6d;
-}
-
 .scene[data-theme="day"] .memorialFrame {
   background: linear-gradient(180deg, #c08a52, #96613a);
 }
@@ -2079,9 +2124,30 @@
   text-shadow: 2px 2px 0 rgba(255, 247, 214, 0.58);
 }
 
+/* Day swaps the whole token set from slate plaque back to sunlit parchment.
+   See the base rule on `.dossier, .scoreboard` for what each token paints. */
 .scene[data-theme="day"] .dossier,
 .scene[data-theme="day"] .scoreboard {
-  background: #ffe5a6;
+  --paper:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.34) 0 4px, transparent 4px 100%) 0 0 / 16px 100%,
+    linear-gradient(180deg, #fff3cb 0%, #ffe5a6 58%, #f5d48c 100%);
+  --paper-line: #2f2347;
+  --paper-rule: #2f2347;
+  --paper-drop: #5a3a22;
+  --paper-sheen: rgba(255, 255, 255, 0.34);
+  --paper-frame: rgba(47, 35, 71, 0.28);
+  --paper-chip: #fff7d6;
+  --paper-chip-lit: #fff2c4;
+  --paper-chip-drop: #b57935;
+  --paper-chip-muted: #b8b0a6;
+  --paper-chip-muted-ink: #332a2e;
+  --paper-ink: #251f21;
+  --paper-ink-soft: #7a4a24;
+  --paper-body: #3a2b2f;
+  --paper-epitaph: #6c2b2f;
+  --paper-dust-a: #e8dfc8;
+  --paper-dust-b: #d4c9aa;
+  --paper-dust-c: #c8b98f;
 }
 
 .scene[data-theme="day"] .board {
@@ -2649,6 +2715,10 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
+  .marqueeText {
+    margin-top: 0;
+  }
+
   .memorial {
     display: none;
   }
@@ -2721,10 +2791,6 @@
     grid-auto-columns: minmax(0, 1fr);
   }
 
-  .brand {
-    font-size: 0.9rem;
-  }
-
   .nav a {
     font-size: 0.74rem;
     padding: 0.44rem 0.58rem;
@@ -2764,8 +2830,8 @@
   .dossier,
   .scoreboard {
     box-shadow:
-      5px 5px 0 #15142f,
-      inset 0 0 0 4px rgba(255, 255, 255, 0.28);
+      5px 5px 0 var(--paper-drop),
+      inset 0 0 0 4px var(--paper-sheen);
   }
 
   .dossierTopline {

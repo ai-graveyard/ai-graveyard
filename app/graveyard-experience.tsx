@@ -1496,9 +1496,6 @@ export default function GraveyardExperience() {
       </div>
 
       <header className={styles.header}>
-        <a className={styles.brand} href="https://github.com/ai-graveyard">
-          AI Graveyard
-        </a>
         <div className={styles.headerActions}>
           <nav className={styles.nav} aria-label={t.navAria}>
             <a href="https://github.com/ai-graveyard">GitHub</a>
