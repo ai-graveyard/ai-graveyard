@@ -256,7 +256,7 @@
   gap: 0.6rem;
   width: min(1180px, calc(100% - 2rem));
   margin: 0 auto;
-  padding: 0.6rem 0 0;
+  padding: 1.1rem 0 0;
 }
 
 .brand,
@@ -381,22 +381,32 @@
   position: relative;
   z-index: 10;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(24rem, 28rem);
   gap: 1rem;
   align-items: start;
   width: min(1180px, calc(100% - 2rem));
   margin: 0 auto;
-  padding: 1.8rem 0 0.8rem;
+  padding: 2.6rem 0 1.8rem;
 }
 
+/* The dossier moved down beside the board, so the title block and the memorial
+   share this row instead — it keeps the header short enough that the first
+   graves are already on screen. */
 .marquee {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2.2rem;
+  align-items: end;
+  max-width: 100%;
+}
+
+.marqueeText {
   max-width: 47rem;
 }
 
 .eyebrow {
   width: max-content;
   max-width: 100%;
-  margin: 0 0 0.55rem;
+  margin: 0 0 0.85rem;
   border: 4px solid #2f2347;
   background: #44d17a;
   box-shadow: 4px 4px 0 #15142f;
@@ -423,7 +433,7 @@
 
 .subtitle {
   max-width: 38rem;
-  margin: 0.7rem 0 0;
+  margin: 0.95rem 0 0;
   color: #f5dbaa;
   font-family: var(--font-geist-sans), Arial, sans-serif;
   font-size: 1.05rem;
@@ -435,7 +445,7 @@
 .memorial {
   position: relative;
   width: max-content;
-  margin: 2rem 0 0 1.4rem;
+  margin: 0 1.4rem 0 0;
 }
 
 .memorialFrame {
@@ -550,7 +560,11 @@
 }
 
 .dossier {
-  position: relative;
+  grid-area: panel;
+  /* Rides along with the board so the graves in the last row still have their
+     dossier on screen when they are clicked. */
+  position: sticky;
+  top: 1rem;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -561,6 +575,40 @@
   padding: 0.8rem;
   overflow: hidden;
   animation: dossierSelect 380ms steps(5, end);
+}
+
+/* Only shown once the panel docks to the bottom edge on narrow screens. */
+.dossierClose {
+  display: none;
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  z-index: 3;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 3px solid #2f2347;
+  padding: 0;
+  background: #ff8a6a;
+  box-shadow: 3px 3px 0 #15142f;
+  cursor: pointer;
+  transition:
+    transform 120ms steps(2, end),
+    box-shadow 120ms steps(2, end);
+}
+
+.dossierClose span {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(45deg, transparent 0 40%, #2f2347 40% 60%, transparent 60% 100%),
+    linear-gradient(-45deg, transparent 0 40%, #2f2347 40% 60%, transparent 60% 100%);
+}
+
+.dossierClose:hover,
+.dossierClose:focus-visible {
+  outline: 0;
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #15142f;
 }
 
 .dossier::before {
@@ -670,6 +718,19 @@
   line-height: 1.05;
   overflow-wrap: anywhere;
   text-transform: uppercase;
+}
+
+.dossierTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dossierEmblem {
+  flex: 0 0 auto;
+  width: 1.7rem;
+  height: 1.7rem;
+  image-rendering: pixelated;
 }
 
 .dossierTagline {
@@ -871,22 +932,33 @@
 .boardWrap {
   position: relative;
   z-index: 10;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 21rem;
+  /* The panel's row is the board's row, so its sticky travel is bounded by the
+     top and bottom of the cemetery and it never rides past either edge. */
+  grid-template-areas:
+    "score ."
+    "board panel";
+  align-items: start;
+  gap: 0 1rem;
   width: min(1180px, calc(100% - 2rem));
   margin: 0 auto;
   padding: 0 0 1.5rem;
 }
 
 .boardScroll {
+  grid-area: board;
   overflow: visible;
 }
 
 .scoreboard {
+  grid-area: score;
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
   width: max-content;
   max-width: 100%;
-  margin-bottom: 0.45rem;
+  margin-bottom: 1.1rem;
   padding: 0.4rem 0.55rem;
 }
 
@@ -919,9 +991,12 @@
 }
 
 .board {
+  --year-column: 7.2rem;
   position: relative;
   display: grid;
-  grid-template-columns: 7.2rem repeat(5, minmax(8.2rem, 1fr));
+  /* Plot count comes from `data-columns`, which the board measures for itself —
+     CSS variables cannot be used as a repeat() count. */
+  grid-template-columns: var(--year-column) repeat(4, minmax(0, 1fr));
   grid-template-rows: repeat(var(--board-rows, 2), 14rem);
   gap: 0;
   min-height: calc(var(--board-rows, 2) * 14rem);
@@ -935,6 +1010,31 @@
     10px 10px 0 #15142f,
     inset 0 0 0 6px #25693e;
   overflow: visible;
+}
+
+.board[data-columns="3"] {
+  grid-template-columns: var(--year-column) repeat(3, minmax(0, 1fr));
+}
+
+.board[data-columns="2"] {
+  --year-column: 3.6rem;
+  grid-template-columns: var(--year-column) repeat(2, minmax(0, 1fr));
+}
+
+.board[data-columns="1"] {
+  --year-column: 3.6rem;
+  grid-template-columns: var(--year-column) minmax(0, 1fr);
+}
+
+.board[data-columns="2"] .yearSignBoard,
+.board[data-columns="1"] .yearSignBoard {
+  padding: 0.3rem 0.26rem;
+  font-size: 0.68rem;
+}
+
+.board[data-columns="2"] .yearSignPost,
+.board[data-columns="1"] .yearSignPost {
+  height: 3rem;
 }
 
 .board::before {
@@ -1299,13 +1399,13 @@
   position: relative;
   z-index: 10;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
   justify-items: center;
   align-content: stretch;
   width: 8.35rem;
-  min-height: 9.25rem;
+  min-height: 10.4rem;
   border: 0;
-  padding: 1.55rem 0.78rem 1rem;
+  padding: 1.2rem 0.78rem 1rem;
   background: transparent;
   color: #251f21;
   cursor: pointer;
@@ -1413,6 +1513,7 @@
 }
 
 .consumingTombstone .tombCap,
+.consumingTombstone .tombEmblem,
 .consumingTombstone .tombName,
 .consumingTombstone .tombDates,
 .consumingTombstone .tombTagline {
@@ -1733,21 +1834,29 @@
   overflow-wrap: anywhere;
 }
 
-.tombName {
+.tombEmblem {
+  position: relative;
+  z-index: 2;
   order: 1;
-  margin-top: 0.22rem;
-  font-size: 0.86rem;
-  font-weight: 900;
-  line-height: 1.12;
-  min-height: 1.75rem;
-  display: grid;
-  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-top: 0.08rem;
+  image-rendering: pixelated;
+}
+
+.tombName {
+  order: 3;
+  margin-top: 0.24rem;
+  font-size: 0.56rem;
+  font-weight: 700;
+  line-height: 1.15;
+  opacity: 0.78;
   text-align: center;
   text-transform: uppercase;
 }
 
 .tombDates {
-  order: 3;
+  order: 4;
   position: relative;
   inset: auto;
   align-self: end;
@@ -1763,17 +1872,17 @@
   align-self: center;
   display: grid;
   place-items: center;
-  margin: 0.34rem 0;
-  padding: 0.18rem 0.34rem 0.22rem;
+  margin: 0.34rem 0 0;
+  padding: 0.22rem 0.38rem 0.26rem;
   background: rgba(255, 250, 236, 0.85);
   box-shadow:
     0 2px 0 rgba(42, 34, 16, 0.3),
     inset 0 -3px 0 var(--accent);
   color: #2c2228;
   font-family: var(--font-geist-sans), Arial, sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 800;
-  line-height: 1.2;
+  line-height: 1.22;
   text-align: center;
 }
 
@@ -2259,6 +2368,17 @@
 }
 
 /* Plant drop: panel thuds down hard from above, overshoots, and settles — like slamming down a PvZ seed */
+/* Docked panel slides up from the bottom edge in chunky steps */
+@keyframes dossierDockRise {
+  0% {
+    translate: -50% 100%;
+  }
+
+  100% {
+    translate: -50% 0;
+  }
+}
+
 @keyframes dossierSelect {
   0% {
     transform: translateY(-0.9rem);
@@ -2326,10 +2446,115 @@
   }
 }
 
+/* No room for a sidebar: the dossier leaves the flow and docks to the bottom
+   edge of the viewport, rising only when a grave is picked. Keep this width in
+   sync with `dossierDockQuery` in graveyard-experience.tsx. */
+@media (max-width: 1080px) {
+  .boardWrap {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "score"
+      "board";
+    padding-bottom: 3rem;
+  }
+
+  /* Room to scroll the last row clear of the raised panel. */
+  .boardWrap[data-dossier-docked="true"] {
+    padding-bottom: calc(var(--dossier-height, 20rem) + 2rem);
+  }
+
+  .dossier {
+    position: fixed;
+    left: 50%;
+    top: auto;
+    bottom: 0;
+    z-index: 40;
+    width: min(1180px, calc(100% - 2rem));
+    max-height: min(64vh, 32rem);
+    min-height: 0;
+    overflow-y: auto;
+    translate: -50% 100%;
+    animation: dossierDockRise 260ms steps(4, end);
+    transition: translate 220ms steps(4, end);
+  }
+
+  .dossier[data-docked="true"] {
+    translate: -50% 0;
+  }
+
+  .dossierClose {
+    display: block;
+  }
+
+  .dossierTopline {
+    padding-right: 2.5rem;
+  }
+}
+
+/* Wide enough to lay the docked panel out in three columns, which keeps it
+   from eating half the cemetery. */
+@media (min-width: 721px) and (max-width: 1080px) {
+  .dossier {
+    display: grid;
+    grid-template-columns: minmax(0, 14rem) minmax(0, 1fr) minmax(0, 15rem);
+    align-content: start;
+    column-gap: 1rem;
+  }
+
+  .dossierTopline {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .dossierTitle {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .dossierTagline {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .status {
+    grid-column: 1;
+    grid-row: 4;
+  }
+
+  .epitaph {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .autopsy {
+    grid-column: 2;
+    grid-row: 3 / span 2;
+  }
+
+  .facts {
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  .stack {
+    grid-column: 3;
+    grid-row: 3;
+  }
+
+  .dossierActions {
+    grid-column: 3;
+    grid-row: 4;
+    margin-top: auto;
+  }
+}
+
 @media (max-width: 860px) {
   .stage {
-    grid-template-columns: 1fr;
     padding-top: 3rem;
+  }
+
+  .marquee {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .memorial {
@@ -2338,11 +2563,6 @@
 
   .title {
     font-size: 4.5rem;
-  }
-
-  .dossier {
-    max-width: 42rem;
-    min-height: 0;
   }
 }
 
@@ -2472,18 +2692,6 @@
     text-align: center;
   }
 
-  .boardScroll {
-    margin-right: -0.625rem;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 2.8rem 0.625rem 0.95rem 0;
-    scroll-padding-inline: 0.625rem;
-  }
-
-  .board {
-    min-width: 55rem;
-    grid-template-columns: 7rem repeat(5, 9.6rem);
-  }
 }
 
 @media (max-width: 520px) {
@@ -2496,7 +2704,7 @@
 
   .stage {
     gap: 1rem;
-    padding-top: 2.1rem;
+    padding-top: 2.4rem;
   }
 
   .nav,
@@ -2554,6 +2762,7 @@
   .consumingTombstone::before,
   .consumingTombstone::after,
   .consumingTombstone .tombCap,
+  .consumingTombstone .tombEmblem,
   .consumingTombstone .tombName,
   .consumingTombstone .tombDates,
   .consumingTombstone .tombTagline,
@@ -2561,5 +2770,9 @@
   .consumingTombstone .bitePixels {
     animation-duration: 1ms;
     animation-iteration-count: 1;
+  }
+
+  .dossier {
+    transition-duration: 1ms;
   }
 }

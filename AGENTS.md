@@ -41,8 +41,10 @@ public/                           # Static SVG assets
   - `ai-graveyard-buried-ids` — JSON array of product IDs
 - The "bury" animation runs for exactly `1450ms` (`buryAnimationMs`), controlled by a `setTimeout`.
 - CSS custom properties (`--lane`, `--plot`, `--accent`) are used for grid placement and per-tombstone accent colors.
-- The cemetery grid is 3 lanes × 5 plots; not all cells are occupied.
-- The dossier panel previews whatever is hovered (`hoverId` — tombstones and buried mounds set it on mouseenter/focus) and falls back to the clicked selection (`activeId`) on mouseleave/blur. The hovered tombstone also lifts + glows (`.hoverTombstone`).
+- The cemetery grid reflows. `boardColumnSteps` maps the board's own measured width to 4 / 3 / 2 / 1 plot columns (a `ResizeObserver` on `.boardScroll` drives it, not a media query), `boardLayout` re-slices the graves into rows for that count, and `.board[data-columns="…"]` picks the matching `grid-template-columns`. Graves are placed by year and `born` date, so a product's `lane` / `plot` fields no longer decide where it lands.
+- The dossier panel only follows the clicked selection (`activeId`). Hover (`hoverId`, set on mouseenter/focus) is purely local to the board: it lifts + glows the tombstone (`.hoverTombstone`) and highlights buried mounds, but never changes the dossier.
+- The dossier lives in the board section, not the header, so graves in the last row still have their dossier on screen. `.boardWrap` is a grid (`score`/`board`/`panel` areas) and the panel is `position: sticky` in the right column.
+- Below 1080px there is no room for that sidebar, so the dossier turns into a drawer fixed to the bottom edge: `data-docked` on the `<aside>` raises it, `.dossierClose` puts it away, and `keepPlotVisible` re-centres the clicked plot in the strip left above it. A `ResizeObserver` publishes the panel height as `--dossier-height`, which `.boardWrap[data-dossier-docked="true"]` turns into bottom padding so the last row can scroll clear. The breakpoint is written twice — `dossierDockQuery` in the tsx and the media query in the CSS — keep them in sync.
 
 ## Adding a new product
 
@@ -55,10 +57,11 @@ Add an entry to the `products` array in `app/graveyard-experience.tsx`:
   repository: "https://github.com/ai-graveyard/<repo>",
   born: "YYYY.MM",
   buried: "YYYY.MM",
-  lane: "1" | "2" | "3",      // grid row
-  plot: "1" | "2" | "3" | "4" | "5",  // grid column
+  lane: "1" | "2" | "3",      // legacy, unused — placement comes from born/buried
+  plot: "1" | "2" | "3" | "4" | "5",  // legacy, unused
   accent: "#rrggbb",          // tombstone cap color
   plant: "sprout" | "mushroom" | "chipflower",
+  emblem: "gradcap" | "idcard" | ...,  // pixel icon carved on the stone, see `Emblem` type
   copy: {
     en: { status, tagline, epitaph, autopsy, stack: string[], signal },
     zh: { status, tagline, epitaph, autopsy, stack: string[], signal },
@@ -66,9 +69,11 @@ Add an entry to the `products` array in `app/graveyard-experience.tsx`:
 }
 ```
 
-Make sure `lane`+`plot` is not already occupied by another product.
+Where the grave lands is worked out by `boardLayout`: graves are grouped by the year in `buried`, sorted by `born`, then filled left to right across however many plot columns currently fit. `lane` and `plot` are still required by the `Product` type but nothing reads them.
 
-`tagline` is the short "what is this" label (e.g. "Sticker camera" / "贴纸相机"). It is always visible on the tombstone plaque, so keep it to a few words; the witty `epitaph` only shows in the dossier panel.
+`tagline` is the short "what is this" label (e.g. "Sticker camera" / "贴纸相机"). It is the tombstone's main plaque text (the repo name renders as a small subtitle below it), so keep it to a few words; the witty `epitaph` only shows in the dossier panel.
+
+`emblem` picks a 12×12 pixel icon drawn on the stone face and next to the dossier title. Icons are string grids in `emblemArt` (`.`=transparent, `O`=outline, `A`=accent, `B`=accent light, `C`=accent dark, `W`=paper); to add a new one, extend the `Emblem` union and `emblemArt`, coloring derives from the product's `accent` automatically.
 
 ## i18n
 

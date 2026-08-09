@@ -16,6 +16,19 @@ type ProductCopy = {
   signal: string;
 };
 
+type Emblem =
+  | "gradcap"
+  | "idcard"
+  | "palette"
+  | "mic"
+  | "heart"
+  | "branch"
+  | "camera"
+  | "quad"
+  | "soap"
+  | "envelope"
+  | "puzzle";
+
 type Product = {
   id: string;
   name: string;
@@ -26,6 +39,7 @@ type Product = {
   plot: string;
   accent: string;
   plant: "sprout" | "mushroom" | "chipflower";
+  emblem: Emblem;
   copy: Record<Language, ProductCopy>;
 };
 
@@ -66,6 +80,7 @@ type SiteCopy = {
   eyebrow: string;
   subtitle: string;
   dossierAria: string;
+  closeDossier: string;
   currentGrave: string;
   burying: string;
   buried: string;
@@ -93,6 +108,9 @@ type SiteCopy = {
 
 type CSSVars = CSSProperties & Record<`--${string}`, string>;
 
+/** Below this width the dossier leaves the sidebar and docks to the viewport bottom. */
+const dossierDockQuery = "(max-width: 1080px)";
+
 const languageStorageKey = "ai-graveyard-language";
 const themeStorageKey = "ai-graveyard-theme";
 const buriedStorageKey = "ai-graveyard-buried-ids";
@@ -108,6 +126,7 @@ const products: Product[] = [
     plot: "1",
     accent: "#a5e4ff",
     plant: "chipflower",
+    emblem: "gradcap",
     copy: {
       en: {
         status: "Open sourced",
@@ -138,6 +157,7 @@ const products: Product[] = [
     plot: "3",
     accent: "#44d17a",
     plant: "sprout",
+    emblem: "idcard",
     copy: {
       en: {
         status: "Open sourced",
@@ -169,6 +189,7 @@ const products: Product[] = [
     plot: "5",
     accent: "#ff9bd4",
     plant: "mushroom",
+    emblem: "palette",
     copy: {
       en: {
         status: "Open sourced",
@@ -199,6 +220,7 @@ const products: Product[] = [
     plot: "2",
     accent: "#ffcf4a",
     plant: "mushroom",
+    emblem: "mic",
     copy: {
       en: {
         status: "Open sourced",
@@ -230,6 +252,7 @@ const products: Product[] = [
     plot: "4",
     accent: "#b99cff",
     plant: "sprout",
+    emblem: "heart",
     copy: {
       en: {
         status: "Open sourced",
@@ -261,6 +284,7 @@ const products: Product[] = [
     plot: "3",
     accent: "#ff7f61",
     plant: "chipflower",
+    emblem: "branch",
     copy: {
       en: {
         status: "Open sourced",
@@ -292,6 +316,7 @@ const products: Product[] = [
     plot: "5",
     accent: "#33e0c0",
     plant: "chipflower",
+    emblem: "camera",
     copy: {
       en: {
         status: "Open sourced",
@@ -323,6 +348,7 @@ const products: Product[] = [
     plot: "6",
     accent: "#5da9ff",
     plant: "mushroom",
+    emblem: "quad",
     copy: {
       en: {
         status: "Open sourced",
@@ -354,6 +380,7 @@ const products: Product[] = [
     plot: "2",
     accent: "#f5b94a",
     plant: "sprout",
+    emblem: "soap",
     copy: {
       en: {
         status: "Open sourced",
@@ -385,6 +412,7 @@ const products: Product[] = [
     plot: "1",
     accent: "#ff5c5c",
     plant: "sprout",
+    emblem: "envelope",
     copy: {
       en: {
         status: "Open sourced",
@@ -416,6 +444,7 @@ const products: Product[] = [
     plot: "2",
     accent: "#c2f24d",
     plant: "chipflower",
+    emblem: "puzzle",
     copy: {
       en: {
         status: "Open sourced",
@@ -450,6 +479,7 @@ const copy: Record<Language, SiteCopy> = {
     subtitle:
       "A pixel garden for AI products that missed product-market fit and came back as public code.",
     dossierAria: "Selected project",
+    closeDossier: "Close dossier",
     currentGrave: "Current grave",
     burying: "Burying...",
     buried: "Buried",
@@ -483,6 +513,7 @@ const copy: Record<Language, SiteCopy> = {
     eyebrow: "开源遗迹",
     subtitle: "一座像素花园，收留那些错过产品市场契合、又作为公开代码回来的 AI 产品。",
     dossierAria: "当前项目",
+    closeDossier: "收起详情",
     currentGrave: "当前墓碑",
     burying: "埋葬中...",
     buried: "已埋葬",
@@ -510,7 +541,20 @@ const copy: Record<Language, SiteCopy> = {
 };
 
 const graveyardYears = ["2025", "2026"];
-const plots = ["1", "2", "3", "4", "5"];
+
+/** Plot columns the board drops down to as the space for it shrinks. The widths
+    are what the board itself gets, year sign column included. */
+const boardColumnSteps = [
+  { minWidth: 660, columns: 4 },
+  { minWidth: 520, columns: 3 },
+  { minWidth: 330, columns: 2 },
+  { minWidth: 0, columns: 1 },
+];
+
+const widestBoard = boardColumnSteps[0].columns;
+
+const columnsForBoardWidth = (width: number) =>
+  boardColumnSteps.find((step) => width >= step.minWidth)?.columns ?? 1;
 const graveCount = products.length;
 const buryAnimationMs = 1450;
 const productIds = new Set(products.map((product) => product.id));
@@ -685,6 +729,205 @@ function PixelTombstoneIcon({ className }: { className?: string }) {
   );
 }
 
+// 12x12 pixel grids: O=outline A=accent B=accent light C=accent dark W=paper
+const emblemArt: Record<Emblem, string[]> = {
+  gradcap: [
+    "............",
+    ".....OO.....",
+    "...OOAAOO...",
+    ".OOAAAAAAOO.",
+    "OAAAAAAAAAAO",
+    ".OOAAAAAAOOO",
+    "...OOAAOO.BO",
+    "....OCCO..BO",
+    "....OCCO.OBO",
+    "....OCCO..O.",
+    "....OOOO....",
+    "............",
+  ],
+  idcard: [
+    "............",
+    "OOOOOOOOOOOO",
+    "OWWWWWWWWWWO",
+    "OWWAAWWWWWWO",
+    "OWWAAWCCCCWO",
+    "OWWWWWWWWWWO",
+    "OWAAAAWCCWWO",
+    "OWAAAAWWWWWO",
+    "OWWWWWWWWWWO",
+    "OOOOOOOOOOOO",
+    "............",
+    "............",
+  ],
+  palette: [
+    "............",
+    "...OOOOOO...",
+    ".OOAAAAAAOO.",
+    "OAABBAAWWAAO",
+    "OAABBAAWWAAO",
+    "OAAAAAAAAAAO",
+    "OAACCAAOOAAO",
+    "OAACCAAOOAAO",
+    ".OOAAAAAAOO.",
+    "...OOOOOO...",
+    "............",
+    "............",
+  ],
+  mic: [
+    "............",
+    "....OOOO....",
+    "...OABBAO...",
+    "...OABBAO...",
+    "...OAAAAO...",
+    "...OCCCCO...",
+    "....OOOO....",
+    ".....OO.....",
+    ".....OO.....",
+    "...OOOOOO...",
+    "............",
+    "............",
+  ],
+  heart: [
+    "............",
+    ".OOOO..OOOO.",
+    "OBBAAOOAAAAO",
+    "OBAAAAAAAAAO",
+    "OAAAAAAAAAAO",
+    ".OAAAAAAAAO.",
+    "..OAAAAAAO..",
+    "...OAAAAO...",
+    "....OAAO....",
+    ".....OO.....",
+    "............",
+    "............",
+  ],
+  branch: [
+    "............",
+    ".OOO....OOO.",
+    ".OBO....OAO.",
+    ".OOO....OOO.",
+    "..O......O..",
+    "...O....O...",
+    "....O..O....",
+    ".....OO.....",
+    ".....OO.....",
+    "....OCCO....",
+    "....OOOO....",
+    "............",
+  ],
+  camera: [
+    "............",
+    "..OOOO......",
+    "OOOOOOOOOOOO",
+    "OAAAAAAAAWAO",
+    "OAAAOOOOAAAO",
+    "OAAOWWBBOAAO",
+    "OAAOBBCCOAAO",
+    "OAAAOOOOAAAO",
+    "OAAAAAAAAAAO",
+    "OOOOOOOOOOOO",
+    "............",
+    "............",
+  ],
+  quad: [
+    "............",
+    "OOOOOOOOOOOO",
+    "OAAAAOOBBBBO",
+    "OAAAAOOBBBBO",
+    "OAAAAOOBBBBO",
+    "OOOOOOOOOOOO",
+    "OWWWWOOCCCCO",
+    "OWWWWOOCCCCO",
+    "OWWWWOOCCCCO",
+    "OOOOOOOOOOOO",
+    "............",
+    "............",
+  ],
+  soap: [
+    "..OOO..OOO..",
+    "..OWO..OWO..",
+    "..OOO..OOO..",
+    "............",
+    ".OOOOOOOOOO.",
+    "OBBAAAAAAAAO",
+    "OAAAWWWWAAAO",
+    "OAAAAAAAAAAO",
+    "OCCCCCCCCCCO",
+    ".OOOOOOOOOO.",
+    "............",
+    "............",
+  ],
+  envelope: [
+    "............",
+    "............",
+    "OOOOOOOOOOOO",
+    "OOAAAAAAAAOO",
+    "OAOAAAAAAOAO",
+    "OAAOAAAAOAAO",
+    "OAAAOAAOAAAO",
+    "OWWWWOOWWWWO",
+    "OWWWWWWWWWWO",
+    "OOOOOOOOOOOO",
+    "............",
+    "............",
+  ],
+  puzzle: [
+    "............",
+    "............",
+    ".OOOOOOOOOO.",
+    ".OBBBOAAAAO.",
+    ".OBBBBOAAAO.",
+    ".OBBBBBOAAO.",
+    ".OBBBBOAAAO.",
+    ".OBBBOAAAAO.",
+    ".OOOOOOOOOO.",
+    "............",
+    "............",
+    "............",
+  ],
+};
+
+const emblemColors: Record<string, string> = {
+  O: "#2d2130",
+  A: "var(--accent)",
+  B: "color-mix(in srgb, var(--accent), #ffffff 45%)",
+  C: "color-mix(in srgb, var(--accent), #1f1626 40%)",
+  W: "#fff6da",
+};
+
+function PixelEmblemIcon({
+  emblem,
+  className,
+}: {
+  emblem: Emblem;
+  className?: string;
+}) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 12 12"
+      role="img"
+      aria-hidden="true"
+      shapeRendering="crispEdges"
+    >
+      {emblemArt[emblem].flatMap((row, y) =>
+        [...row].map((cell, x) =>
+          cell === "." ? null : (
+            <rect
+              key={`${x}-${y}`}
+              x={x}
+              y={y}
+              width={1}
+              height={1}
+              fill={emblemColors[cell]}
+            />
+          ),
+        ),
+      )}
+    </svg>
+  );
+}
+
 const parseBuriedIds = (value: string | null) => {
   if (!value) {
     return new Set<string>();
@@ -712,6 +955,7 @@ export default function GraveyardExperience() {
   const [theme, setTheme] = useState<Theme>("night");
   const [preferencesReady, setPreferencesReady] = useState(false);
   const [activeId, setActiveId] = useState(products[1].id);
+  const [dossierDocked, setDossierDocked] = useState(false);
   const [hoverId, setHoverId] = useState<string | null>(null);
   const [consumingId, setConsumingId] = useState<string | null>(null);
   const [buriedIds, setBuriedIds] = useState<Set<string>>(() => new Set());
@@ -720,6 +964,9 @@ export default function GraveyardExperience() {
     createInitialZombiePositions,
   );
   const zombiePositionsRef = useRef<ZombiePosition[]>(zombiePositions);
+  const dossierRef = useRef<HTMLElement | null>(null);
+  const boardScrollRef = useRef<HTMLDivElement | null>(null);
+  const [boardColumns, setBoardColumns] = useState(widestBoard);
   const [zombieTarget, setZombieTarget] = useState<ZombieTarget | null>(null);
 
   useEffect(() => {
@@ -879,16 +1126,55 @@ export default function GraveyardExperience() {
     [activeId],
   );
 
-  const previewProduct = useMemo(
-    () =>
-      products.find((product) => product.id === hoverId) ?? activeProduct,
-    [activeProduct, hoverId],
-  );
-
   const zombiePositionsById = useMemo(
     () => new Map(zombiePositions.map((position) => [position.id, position])),
     [zombiePositions],
   );
+
+  // Graves reflow into fewer plots per row as the board narrows, so the layout
+  // follows the measured board rather than a viewport media query.
+  useEffect(() => {
+    const element = boardScrollRef.current;
+
+    if (!element) {
+      return;
+    }
+
+    const measure = () => {
+      setBoardColumns(columnsForBoardWidth(element.clientWidth));
+    };
+
+    measure();
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, []);
+
+  // The docked panel floats over the page, so the board needs to know how tall
+  // it currently is to leave the last row somewhere to scroll to.
+  useEffect(() => {
+    const panel = dossierRef.current;
+
+    if (!panel) {
+      return;
+    }
+
+    const publishHeight = () => {
+      document.documentElement.style.setProperty(
+        "--dossier-height",
+        `${panel.offsetHeight}px`,
+      );
+    };
+
+    publishHeight();
+
+    const observer = new ResizeObserver(publishHeight);
+    observer.observe(panel);
+
+    return () => observer.disconnect();
+  }, [activeId]);
 
   const boardLayout = useMemo(
     () => {
@@ -904,7 +1190,7 @@ export default function GraveyardExperience() {
 
         const rowsInYear = Math.max(
           1,
-          Math.ceil(productsInYear.length / plots.length),
+          Math.ceil(productsInYear.length / boardColumns),
         );
 
         yearRows.set(year, { start: rowCursor + 1, span: rowsInYear });
@@ -914,24 +1200,29 @@ export default function GraveyardExperience() {
           rows.push({ year, globalRow: rowCursor });
 
           productsInYear
-            .slice(rowInYear * plots.length, (rowInYear + 1) * plots.length)
+            .slice(rowInYear * boardColumns, (rowInYear + 1) * boardColumns)
             .forEach((product, plotIndex) => {
-              occupiedPlots.set(`${rowCursor}-${plots[plotIndex]}`, product);
+              occupiedPlots.set(`${rowCursor}-${plotIndex + 1}`, product);
             });
         }
       }
 
       return { occupiedPlots, yearRows, rows, totalRows: rowCursor };
     },
-    [],
+    [boardColumns],
+  );
+
+  const plots = useMemo(
+    () => Array.from({ length: boardColumns }, (_, index) => String(index + 1)),
+    [boardColumns],
   );
 
   const t = copy[language];
-  const previewProductCopy = previewProduct.copy[language];
+  const activeProductCopy = activeProduct.copy[language];
   const buriedCount = buriedIds.size;
   const standingCount = graveCount - buriedCount;
-  const previewIsBuried = buriedIds.has(previewProduct.id);
-  const previewIsConsuming = consumingId === previewProduct.id;
+  const activeIsBuried = buriedIds.has(activeProduct.id);
+  const activeIsConsuming = consumingId === activeProduct.id;
   const lastBuriedProduct = lastBuriedId
     ? products.find((product) => product.id === lastBuriedId)
     : null;
@@ -940,24 +1231,65 @@ export default function GraveyardExperience() {
     { value: "day", label: t.day },
   ];
 
+  // Below the sidebar breakpoint the dossier rises from the bottom edge and
+  // covers the plot that was just clicked, so re-centre that plot inside the
+  // strip of viewport the panel leaves behind.
+  const keepPlotVisible = (plot?: HTMLElement | null) => {
+    if (!plot || !window.matchMedia(dossierDockQuery).matches) {
+      return;
+    }
+
+    const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "auto"
+      : "smooth";
+
+    window.requestAnimationFrame(() => {
+      const plotRect = plot.getBoundingClientRect();
+      const dockHeight =
+        Number.parseFloat(
+          getComputedStyle(document.documentElement).getPropertyValue(
+            "--dossier-height",
+          ),
+        ) || 0;
+      const margin = Math.max(
+        16,
+        (window.innerHeight - dockHeight - plotRect.height) / 2,
+      );
+
+      window.scrollTo({
+        top: window.scrollY + plotRect.top - margin,
+        behavior,
+      });
+    });
+  };
+
+  const selectProduct = (product: Product, tombstone?: HTMLElement | null) => {
+    setActiveId(product.id);
+    setDossierDocked(true);
+    keepPlotVisible(tombstone);
+  };
+
   const buryProduct = (product: Product) => {
     if (consumingId || buriedIds.has(product.id)) {
       return;
     }
 
     setActiveId(product.id);
+    setDossierDocked(true);
     setHoverId(null);
     setLastBuriedId(null);
     setConsumingId(product.id);
   };
 
-  const restoreBuriedProduct = (productId: string) => {
+  const restoreBuriedProduct = (productId: string, mound?: HTMLElement | null) => {
     setBuriedIds((currentBuriedIds) => {
       const nextBuriedIds = new Set(currentBuriedIds);
       nextBuriedIds.delete(productId);
       return nextBuriedIds;
     });
     setActiveId(productId);
+    setDossierDocked(true);
+    keepPlotVisible(mound);
 
     if (lastBuriedId === productId) {
       setLastBuriedId(null);
@@ -1065,11 +1397,13 @@ export default function GraveyardExperience() {
 
       <section className={styles.stage} aria-labelledby="graveyard-title">
         <div className={styles.marquee}>
-          <p className={styles.eyebrow}>{t.eyebrow}</p>
-          <h1 id="graveyard-title" className={styles.title}>
-            AI Graveyard
-          </h1>
-          <p className={styles.subtitle}>{t.subtitle}</p>
+          <div className={styles.marqueeText}>
+            <p className={styles.eyebrow}>{t.eyebrow}</p>
+            <h1 id="graveyard-title" className={styles.title}>
+              AI Graveyard
+            </h1>
+            <p className={styles.subtitle}>{t.subtitle}</p>
+          </div>
           <figure className={styles.memorial} aria-hidden="true">
             <span className={styles.memorialFrame}>
               <PixelTombstoneIcon className={`${styles.pixelTombstone} ${styles.memorialArt}`} />
@@ -1078,87 +1412,108 @@ export default function GraveyardExperience() {
             <span className={styles.memorialGround} />
           </figure>
         </div>
+      </section>
 
+      <section
+        id="graveyard"
+        className={styles.boardWrap}
+        data-dossier-docked={dossierDocked ? "true" : "false"}
+        aria-label={t.boardAria}
+      >
         <aside
           key={activeProduct.id}
+          ref={dossierRef}
           className={styles.dossier}
-          style={{ "--accent": previewProduct.accent } as CSSVars}
+          data-docked={dossierDocked ? "true" : "false"}
+          style={{ "--accent": activeProduct.accent } as CSSVars}
           aria-label={t.dossierAria}
         >
           <span className={styles.dossierVines} aria-hidden="true" />
           <span className={styles.dossierDust} aria-hidden="true" />
+          <button
+            className={styles.dossierClose}
+            type="button"
+            onClick={() => setDossierDocked(false)}
+            aria-label={t.closeDossier}
+          >
+            <span aria-hidden="true" />
+          </button>
           <div className={styles.dossierTopline}>
             <span>{t.currentGrave}</span>
             <span>
-              {previewIsConsuming
+              {activeIsConsuming
                 ? t.burying
-                : previewIsBuried
+                : activeIsBuried
                   ? t.buried
-                  : previewProductCopy.signal}
+                  : activeProductCopy.signal}
             </span>
           </div>
-          <h2>{previewProduct.name}</h2>
-          <p className={styles.dossierTagline}>{previewProductCopy.tagline}</p>
-          {(previewIsConsuming || previewIsBuried) && (
+          <h2 className={styles.dossierTitle}>
+            <PixelEmblemIcon
+              emblem={activeProduct.emblem}
+              className={styles.dossierEmblem}
+            />
+            {activeProduct.name}
+          </h2>
+          <p className={styles.dossierTagline}>{activeProductCopy.tagline}</p>
+          {(activeIsConsuming || activeIsBuried) && (
             <p
               className={`${styles.status} ${
-                previewIsConsuming ? styles.statusConsuming : ""
-              } ${previewIsBuried ? styles.statusBuried : ""}`}
+                activeIsConsuming ? styles.statusConsuming : ""
+              } ${activeIsBuried ? styles.statusBuried : ""}`}
             >
-              {previewIsConsuming ? t.dataVinesActive : t.buriedLocally}
+              {activeIsConsuming ? t.dataVinesActive : t.buriedLocally}
             </p>
           )}
-          <p className={styles.epitaph}>{previewProductCopy.epitaph}</p>
-          <p className={styles.autopsy}>{previewProductCopy.autopsy}</p>
+          <p className={styles.epitaph}>{activeProductCopy.epitaph}</p>
+          <p className={styles.autopsy}>{activeProductCopy.autopsy}</p>
           <dl className={styles.facts}>
             <div>
               <dt>{t.born}</dt>
-              <dd>{previewProduct.born}</dd>
+              <dd>{activeProduct.born}</dd>
             </div>
             <div>
               <dt>{t.buriedDate}</dt>
-              <dd>{previewProduct.buried}</dd>
+              <dd>{activeProduct.buried}</dd>
             </div>
           </dl>
           <div className={styles.stack} aria-label={t.stackAria}>
-            {previewProductCopy.stack.map((item) => (
+            {activeProductCopy.stack.map((item) => (
               <span key={item}>{item}</span>
             ))}
           </div>
           <div className={styles.dossierActions}>
             <a
               className={styles.exhume}
-              href={previewProduct.repository}
+              href={activeProduct.repository}
               target="_blank"
               rel="noreferrer"
             >
               {t.exhumeSource}
             </a>
-            {!previewIsBuried && !previewIsConsuming ? (
+            {!activeIsBuried && !activeIsConsuming ? (
               <button
                 className={styles.dossierBuryButton}
-                onClick={() => buryProduct(previewProduct)}
-                aria-label={t.buryProject(previewProduct.name)}
+                onClick={() => buryProduct(activeProduct)}
+                aria-label={t.buryProject(activeProduct.name)}
               >
                 {t.bury}
               </button>
-            ) : previewIsConsuming ? (
+            ) : activeIsConsuming ? (
               <span className={styles.dossierBuryBusy}>{t.burying}</span>
             ) : (
               <button
                 className={styles.dossierBuryDone}
                 type="button"
-                onClick={() => restoreBuriedProduct(previewProduct.id)}
-                aria-label={t.undoBurial(previewProduct.name)}
+                onClick={() => restoreBuriedProduct(activeProduct.id)}
+                aria-label={t.undoBurial(activeProduct.name)}
               >
                 {t.buried}
               </button>
             )}
           </div>
         </aside>
-      </section>
 
-      <section id="graveyard" className={styles.boardWrap} aria-label={t.boardAria}>
         <div className={styles.scoreboard} aria-label={t.scoreboardAria} aria-live="polite">
           <span>{t.gravesStat(graveCount)}</span>
           <span>{t.standingStat(standingCount)}</span>
@@ -1170,9 +1525,10 @@ export default function GraveyardExperience() {
           ) : null}
         </div>
 
-        <div className={styles.boardScroll}>
+        <div className={styles.boardScroll} ref={boardScrollRef}>
           <div
             className={styles.board}
+            data-columns={String(boardColumns)}
             onClick={moveZombiesToClick}
             style={{ "--board-rows": String(boardLayout.totalRows) } as CSSVars}
           >
@@ -1271,7 +1627,9 @@ export default function GraveyardExperience() {
                           } ${isHovered ? styles.hoverTombstone : ""} ${
                             isConsuming ? styles.consumingTombstone : ""
                           }`}
-                          onClick={() => setActiveId(product.id)}
+                          onClick={(event) =>
+                            selectProduct(product, event.currentTarget)
+                          }
                           onMouseEnter={() => setHoverId(product.id)}
                           onMouseLeave={() => setHoverId(null)}
                           onFocus={() => setHoverId(product.id)}
@@ -1300,12 +1658,16 @@ export default function GraveyardExperience() {
                           </span>
                           <span className={styles.bitePixels} aria-hidden="true" />
                           <span className={styles.tombCap} aria-hidden="true" />
+                          <PixelEmblemIcon
+                            emblem={product.emblem}
+                            className={styles.tombEmblem}
+                          />
+                          <span className={styles.tombTagline}>
+                            {productCopy.tagline}
+                          </span>
                           <span className={styles.tombName}>{product.name}</span>
                           <span className={styles.tombDates}>
                             {product.born} - {product.buried}
-                          </span>
-                          <span className={styles.tombTagline}>
-                            {productCopy.tagline}
                           </span>
                         </button>
                         <button
@@ -1324,7 +1686,9 @@ export default function GraveyardExperience() {
                           isHovered ? styles.buriedMarkerHover : ""
                         }`}
                         type="button"
-                        onClick={() => restoreBuriedProduct(product.id)}
+                        onClick={(event) =>
+                          restoreBuriedProduct(product.id, event.currentTarget)
+                        }
                         onMouseEnter={() => setHoverId(product.id)}
                         onMouseLeave={() => setHoverId(null)}
                         onFocus={() => setHoverId(product.id)}
