@@ -42,6 +42,8 @@ public/                           # Static SVG assets
 - The "bury" animation runs for exactly `1450ms` (`buryAnimationMs`), controlled by a `setTimeout`.
 - CSS custom properties (`--lane`, `--plot`, `--accent`) are used for grid placement and per-tombstone accent colors.
 - The cemetery grid reflows. `boardColumnSteps` maps the board's own measured width to 4 / 3 / 2 / 1 plot columns (a `ResizeObserver` on `.boardScroll` drives it, not a media query), `boardLayout` re-slices the graves into rows for that count, and `.board[data-columns="…"]` picks the matching `grid-template-columns`. Graves are placed by year and `born` date, so a product's `lane` / `plot` fields no longer decide where it lands.
+- `graveyardYears` is derived from the products (every distinct `born` year, oldest first), so a product from a new year gets its own section with no config. Every section after the first is preceded by a `.yearDivider` row — a strip of deeper grass with a row of pixel flowers and grass tufts — and is shifted up by `.raisedYearRow`.
+- Because divider rows and plot rows are different heights, `grid-template-rows` cannot be a `repeat()`. `boardLayout` builds the track list as `rowSizes` (`var(--plot-row-height)` / `var(--year-divider-height)` tokens) and the board reads it from `--board-row-sizes`; `--board-plot-rows` and `--board-divider-rows` only feed the `min-height` calc.
 - The dossier panel only follows the clicked selection (`activeId`). Hover (`hoverId`, set on mouseenter/focus) is purely local to the board: it lifts + glows the tombstone (`.hoverTombstone`) and highlights buried mounds, but never changes the dossier.
 - The dossier lives in the board section, not the header, so graves in the last row still have their dossier on screen. `.boardWrap` is a grid (`score`/`board`/`panel` areas) and the panel is `position: sticky` in the right column.
 - Below 1080px there is no room for that sidebar, so the dossier turns into a drawer fixed to the bottom edge: `data-docked` on the `<aside>` raises it, `.dossierClose` puts it away, and `keepPlotVisible` re-centres the clicked plot in the strip left above it. A `ResizeObserver` publishes the panel height as `--dossier-height`, which `.boardWrap[data-dossier-docked="true"]` turns into bottom padding so the last row can scroll clear. The breakpoint is written twice — `dossierDockQuery` in the tsx and the media query in the CSS — keep them in sync.
@@ -69,7 +71,7 @@ Add an entry to the `products` array in `app/graveyard-experience.tsx`:
 }
 ```
 
-Where the grave lands is worked out by `boardLayout`: graves are grouped by the year in `buried`, sorted by `born`, then filled left to right across however many plot columns currently fit. `lane` and `plot` are still required by the `Product` type but nothing reads them.
+Where the grave lands is worked out by `boardLayout`: graves are grouped by the year in `born` (`getProductYear`), sorted by `born`, then filled left to right across however many plot columns currently fit. `lane` and `plot` are still required by the `Product` type but nothing reads them.
 
 `tagline` is the short "what is this" label (e.g. "Sticker camera" / "贴纸相机"). It is the tombstone's main plaque text (the repo name renders as a small subtitle below it), so keep it to a few words; the witty `epitaph` only shows in the dossier panel.
 

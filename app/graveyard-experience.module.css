@@ -992,14 +992,21 @@
 
 .board {
   --year-column: 7.2rem;
+  --plot-row-height: 14rem;
+  --year-divider-height: 2.5rem;
   position: relative;
   display: grid;
   /* Plot count comes from `data-columns`, which the board measures for itself —
      CSS variables cannot be used as a repeat() count. */
   grid-template-columns: var(--year-column) repeat(4, minmax(0, 1fr));
-  grid-template-rows: repeat(var(--board-rows, 2), 14rem);
+  /* Row track list is built in `boardLayout` because plot rows and the walkway
+     rows between years are different heights. */
+  grid-template-rows: var(--board-row-sizes, var(--plot-row-height));
   gap: 0;
-  min-height: calc(var(--board-rows, 2) * 14rem);
+  min-height: calc(
+    var(--board-plot-rows, 2) * var(--plot-row-height) +
+    var(--board-divider-rows, 0) * var(--year-divider-height)
+  );
   border: 6px solid #2f2347;
   background:
     linear-gradient(135deg, rgba(156, 255, 109, 0.18) 0 8px, transparent 8px 100%),
@@ -1310,6 +1317,59 @@
     0 4px 0 #3b2418;
 }
 
+/* Strip of deeper grass that cuts the board into one patch per year. Spans every
+   column so the year sign column is separated too. */
+.yearDivider {
+  position: relative;
+  z-index: 5;
+  grid-column: 1 / -1;
+  grid-row: var(--year-row);
+  display: grid;
+  align-content: center;
+  min-width: 0;
+  background:
+    linear-gradient(135deg, rgba(20, 58, 37, 0.4) 0 8px, transparent 8px 100%),
+    #2c8049;
+  background-size: 32px 32px, 100% 100%;
+}
+
+.yearDividerFlowers {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 0 0.9rem;
+  overflow: hidden;
+}
+
+.yearDividerFlower,
+.yearDividerBlade {
+  flex: none;
+  transform: translateY(var(--sprig-lift, 0px));
+}
+
+/* Five-pixel flower on a stem, drawn with box-shadow so it stays crisp. */
+.yearDividerFlower {
+  width: 4px;
+  height: 4px;
+  background: #ffd76a;
+  box-shadow:
+    0 -4px 0 var(--petal),
+    -4px 0 0 var(--petal),
+    4px 0 0 var(--petal),
+    0 4px 0 var(--petal),
+    0 8px 0 #1f6a3c;
+}
+
+/* Tuft of taller grass between the flowers. */
+.yearDividerBlade {
+  width: 4px;
+  height: 12px;
+  background: #1f6a3c;
+  box-shadow:
+    4px -4px 0 #3ca456,
+    -4px 4px 0 #3ca456;
+}
+
 .plot {
   position: relative;
   grid-column: var(--plot-column);
@@ -1572,23 +1632,16 @@
 }
 
 .ghost {
+  --hem-play: paused;
   position: absolute;
   left: 50%;
-  top: -2.5rem;
+  top: -3.75rem;
   z-index: -1;
-  display: flex;
-  gap: 0.42rem;
-  justify-content: center;
-  width: 2.55rem;
-  height: 2.25rem;
-  background: #dff6ff;
-  box-shadow:
-    0 -6px 0 #dff6ff,
-    6px 0 0 #b6e8ff,
-    -6px 0 0 #ffffff,
-    0 6px 0 rgba(223, 246, 255, 0.86);
+  width: 3.3rem;
+  height: 3.67rem;
   opacity: 0;
   transform: translate(-50%, 1.25rem);
+  filter: drop-shadow(0 0 5px rgba(158, 214, 255, 0.5));
   transition:
     opacity 140ms steps(2, end),
     transform 220ms steps(4, end);
@@ -1597,17 +1650,25 @@
 .tombstone:not(:disabled):hover .ghost,
 .tombstone:focus-visible .ghost,
 .activeTombstone .ghost {
-  opacity: 1;
+  --hem-play: running;
+  opacity: 0.94;
   transform: translate(-50%, 0);
   animation: ghostFloat 1s steps(4, end) infinite alternate;
 }
 
-.ghostEye {
-  display: block;
-  width: 0.42rem;
-  height: 0.42rem;
-  margin-top: 0.45rem;
-  background: #2f2347;
+/* The hem alternates between two hand-drawn frames so the sheet ripples. */
+.ghostHemHang,
+.ghostHemSway {
+  animation: 620ms steps(1, end) infinite;
+  animation-play-state: var(--hem-play);
+}
+
+.ghostHemHang {
+  animation-name: ghostHemHang;
+}
+
+.ghostHemSway {
+  animation-name: ghostHemSway;
 }
 
 .plant {
@@ -2049,6 +2110,13 @@
   box-shadow: inset 0 8px 0 #9b6a42;
 }
 
+.scene[data-theme="day"] .yearDivider {
+  background:
+    linear-gradient(135deg, rgba(24, 74, 44, 0.32) 0 8px, transparent 8px 100%),
+    #3f944f;
+  background-size: 32px 32px, 100% 100%;
+}
+
 .scene[data-theme="day"] .buriedMarker {
   color: #253056;
 }
@@ -2183,6 +2251,30 @@
 @keyframes ghostFloat {
   to {
     translate: 0 -0.5rem;
+  }
+}
+
+@keyframes ghostHemHang {
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes ghostHemSway {
+  0%,
+  49% {
+    opacity: 0;
+  }
+
+  50%,
+  100% {
+    opacity: 1;
   }
 }
 
@@ -2758,6 +2850,8 @@
   .dossierDust,
   .tombstone:focus-visible .ghost,
   .activeTombstone .ghost,
+  .ghostHemHang,
+  .ghostHemSway,
   .consumingTombstone,
   .consumingTombstone::before,
   .consumingTombstone::after,

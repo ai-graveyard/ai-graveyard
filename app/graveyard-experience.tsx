@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties, MouseEvent } from "react";
+import type { CSSProperties, MouseEvent, ReactElement } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./graveyard-experience.module.css";
 
@@ -104,6 +104,7 @@ type SiteCopy = {
   selectProject: (name: string) => string;
   projectIsBeingBuried: (name: string) => string;
   projectHasBeenBuried: (name: string) => string;
+  yearDivider: (previousYear: string, year: string) => string;
 };
 
 type CSSVars = CSSProperties & Record<`--${string}`, string>;
@@ -503,6 +504,8 @@ const copy: Record<Language, SiteCopy> = {
     selectProject: (name) => `Select ${name}`,
     projectIsBeingBuried: (name) => `${name} is being buried`,
     projectHasBeenBuried: (name) => `${name} has been buried`,
+    yearDivider: (previousYear, year) =>
+      `End of ${previousYear}, start of ${year}`,
   },
   zh: {
     navAria: "项目链接",
@@ -537,10 +540,9 @@ const copy: Record<Language, SiteCopy> = {
     selectProject: (name) => `选择 ${name}`,
     projectIsBeingBuried: (name) => `${name} 正在被埋葬`,
     projectHasBeenBuried: (name) => `${name} 已被埋葬`,
+    yearDivider: (previousYear, year) => `${previousYear} 年到此为止，下面是 ${year} 年`,
   },
 };
-
-const graveyardYears = ["2025", "2026"];
 
 /** Plot columns the board drops down to as the space for it shrinks. The widths
     are what the board itself gets, year sign column included. */
@@ -600,6 +602,23 @@ const isTheme = (value: string | null): value is Theme =>
   value === "night" || value === "day";
 
 const getProductYear = (product: Product) => product.born.slice(0, 4);
+
+/** Every year that owns at least one grave, oldest first. Derived from the data
+    so a product from a new year gets its own section without any config. */
+const graveyardYears = Array.from(new Set(products.map(getProductYear))).sort();
+
+/** Sprigs cycled along a year boundary — flowers with grass tufts mixed in and a
+    few pixels of vertical jitter, so the row reads as planting, not a dotted rule.
+    `petal: null` is a tuft. */
+const dividerSprigs: { petal: string | null; lift: string }[] = [
+  { petal: "#ffd9ec", lift: "0px" },
+  { petal: null, lift: "2px" },
+  { petal: "#fff3b0", lift: "-3px" },
+  { petal: null, lift: "-1px" },
+  { petal: "#c9e7ff", lift: "2px" },
+  { petal: "#ffc7c7", lift: "-2px" },
+  { petal: null, lift: "1px" },
+];
 
 const compareProductsByBorn = (firstProduct: Product, secondProduct: Product) => {
   const bornOrder = firstProduct.born.localeCompare(secondProduct.born);
@@ -928,6 +947,108 @@ function PixelEmblemIcon({
   );
 }
 
+// 18x20 sheet ghost: O=outline W=cloth H=moonlit fold S=shaded fold E=eye socket
+// The sheet flares as it falls; rows 14+ are the hem, which swaps between two frames.
+const ghostBody = [
+  ".......OOOO.......",
+  ".....OOHWWWOO.....",
+  "....OHWWWWWWSO....",
+  "...OHWWWWWWWWSO...",
+  "...OHWWWWWWWWSO...",
+  "..OHWWWWWWWWWWSO..",
+  "..OHWWWWWWWWWWSO..",
+  "..OHWEEWWWWEEWSO..",
+  "..OHWEEWWWWEEWSO..",
+  "..OHWEEWWWWEEWSO..",
+  "..OHWSSWWWWSSWSO..",
+  ".OHWWWWWWWWWWWSSO.",
+  ".OHWWWWWWWWWWWSSO.",
+  ".OHWWWWWWWWWWWSSO.",
+];
+
+const ghostHemHangs = [
+  "OHWWWWWWWWWWWWWWSO",
+  "OHWWWWWWWWWWWWWWSO",
+  "OHWWSOOWWWSOOWWWSO",
+  "OHWSO..OHSO..OHWSO",
+  ".OHSO..OHSO...OOO.",
+  "..OO....OO........",
+];
+
+const ghostHemSways = [
+  "OHWWWWWWWWWWWWWWSO",
+  "OHWWWWWWWWWWWWWWSO",
+  "OHWWSOWWWWSOWWWWSO",
+  "OHWSO.OHWSO.OHWWSO",
+  "OHSO...OHO...OHSO.",
+  ".OO.....OO....OO..",
+];
+
+const ghostColors: Record<string, string> = {
+  O: "#3d3663",
+  W: "#e8f5ff",
+  H: "#ffffff",
+  S: "#aed0e6",
+  E: "#241d3d",
+};
+
+// One <rect> per run of same-colored pixels instead of one per pixel.
+function ghostRects(rows: string[], offsetY: number) {
+  const rects: ReactElement[] = [];
+
+  for (let y = 0; y < rows.length; y += 1) {
+    const row = rows[y];
+    let x = 0;
+
+    while (x < row.length) {
+      const cell = row[x];
+
+      if (cell === ".") {
+        x += 1;
+        continue;
+      }
+
+      let width = 1;
+      while (row[x + width] === cell) {
+        width += 1;
+      }
+
+      rects.push(
+        <rect
+          key={`${x}-${y}`}
+          x={x}
+          y={y + offsetY}
+          width={width}
+          height={1}
+          fill={ghostColors[cell]}
+        />,
+      );
+      x += width;
+    }
+  }
+
+  return rects;
+}
+
+function PixelGhost({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 18 20"
+      aria-hidden="true"
+      shapeRendering="crispEdges"
+    >
+      {ghostRects(ghostBody, 0)}
+      <g className={styles.ghostHemHang}>
+        {ghostRects(ghostHemHangs, ghostBody.length)}
+      </g>
+      <g className={styles.ghostHemSway}>
+        {ghostRects(ghostHemSways, ghostBody.length)}
+      </g>
+    </svg>
+  );
+}
+
 const parseBuriedIds = (value: string | null) => {
   if (!value) {
     return new Set<string>();
@@ -1179,11 +1300,30 @@ export default function GraveyardExperience() {
   const boardLayout = useMemo(
     () => {
       const occupiedPlots = new Map<string, Product>();
-      const yearRows = new Map<string, { start: number; span: number }>();
-      const rows: { year: string; globalRow: number }[] = [];
+      const yearRows = new Map<
+        string,
+        { start: number; span: number; raised: boolean }
+      >();
+      const rows: { year: string; globalRow: number; raised: boolean }[] = [];
+      /** One walkway row in front of every year section but the first. */
+      const dividers: { year: string; previousYear: string; globalRow: number }[] =
+        [];
+      const rowSizes: string[] = [];
       let rowCursor = 0;
 
-      for (const year of graveyardYears) {
+      graveyardYears.forEach((year, yearIndex) => {
+        const raised = yearIndex > 0;
+
+        if (yearIndex > 0) {
+          rowCursor += 1;
+          rowSizes.push("var(--year-divider-height)");
+          dividers.push({
+            year,
+            previousYear: graveyardYears[yearIndex - 1],
+            globalRow: rowCursor,
+          });
+        }
+
         const productsInYear = products
           .filter((product) => getProductYear(product) === year)
           .sort(compareProductsByBorn);
@@ -1193,11 +1333,12 @@ export default function GraveyardExperience() {
           Math.ceil(productsInYear.length / boardColumns),
         );
 
-        yearRows.set(year, { start: rowCursor + 1, span: rowsInYear });
+        yearRows.set(year, { start: rowCursor + 1, span: rowsInYear, raised });
 
         for (let rowInYear = 0; rowInYear < rowsInYear; rowInYear += 1) {
           rowCursor += 1;
-          rows.push({ year, globalRow: rowCursor });
+          rowSizes.push("var(--plot-row-height)");
+          rows.push({ year, globalRow: rowCursor, raised });
 
           productsInYear
             .slice(rowInYear * boardColumns, (rowInYear + 1) * boardColumns)
@@ -1205,9 +1346,18 @@ export default function GraveyardExperience() {
               occupiedPlots.set(`${rowCursor}-${plotIndex + 1}`, product);
             });
         }
-      }
+      });
 
-      return { occupiedPlots, yearRows, rows, totalRows: rowCursor };
+      return {
+        occupiedPlots,
+        yearRows,
+        rows,
+        dividers,
+        totalRows: rowCursor,
+        rowSizes: rowSizes.join(" "),
+        plotRowCount: rows.length,
+        dividerRowCount: dividers.length,
+      };
     },
     [boardColumns],
   );
@@ -1530,7 +1680,13 @@ export default function GraveyardExperience() {
             className={styles.board}
             data-columns={String(boardColumns)}
             onClick={moveZombiesToClick}
-            style={{ "--board-rows": String(boardLayout.totalRows) } as CSSVars}
+            style={
+              {
+                "--board-row-sizes": boardLayout.rowSizes,
+                "--board-plot-rows": String(boardLayout.plotRowCount),
+                "--board-divider-rows": String(boardLayout.dividerRowCount),
+              } as CSSVars
+            }
           >
             <div className={styles.fence} aria-hidden="true" />
             <div className={styles.zombieLayer} aria-hidden="true">
@@ -1567,13 +1723,52 @@ export default function GraveyardExperience() {
                 );
               })}
             </div>
+            {boardLayout.dividers.map(({ year, previousYear, globalRow }) => (
+              <div
+                key={`divider-${year}`}
+                className={styles.yearDivider}
+                style={{ "--year-row": String(globalRow) } as CSSVars}
+                role="separator"
+                aria-label={t.yearDivider(previousYear, year)}
+              >
+                <span className={styles.yearDividerFlowers} aria-hidden="true">
+                  {Array.from(
+                    { length: boardColumns * 6 + 4 },
+                    (_, sprigIndex) => {
+                      const sprig =
+                        dividerSprigs[sprigIndex % dividerSprigs.length];
+
+                      return sprig.petal ? (
+                        <span
+                          key={sprigIndex}
+                          className={styles.yearDividerFlower}
+                          style={
+                            {
+                              "--petal": sprig.petal,
+                              "--sprig-lift": sprig.lift,
+                            } as CSSVars
+                          }
+                        />
+                      ) : (
+                        <span
+                          key={sprigIndex}
+                          className={styles.yearDividerBlade}
+                          style={{ "--sprig-lift": sprig.lift } as CSSVars}
+                        />
+                      );
+                    },
+                  )}
+                </span>
+              </div>
+            ))}
             {graveyardYears.map((year) => {
-              const isRaisedYear = year === "2026";
               const rowInfo = boardLayout.yearRows.get(year);
 
               if (!rowInfo) {
                 return null;
               }
+
+              const isRaisedYear = rowInfo.raised;
 
               return (
                 <div
@@ -1595,11 +1790,10 @@ export default function GraveyardExperience() {
                 </div>
               );
             })}
-            {boardLayout.rows.map(({ year, globalRow }) =>
+            {boardLayout.rows.map(({ globalRow, raised: isRaisedYear }) =>
               plots.map((plot) => {
                 const product = boardLayout.occupiedPlots.get(`${globalRow}-${plot}`);
                 const yearRow = String(globalRow);
-                const isRaisedYear = year === "2026";
                 const isBuried = product ? buriedIds.has(product.id) : false;
                 const isActive = product ? activeId === product.id : false;
                 const isConsuming = product ? consumingId === product.id : false;
@@ -1643,10 +1837,7 @@ export default function GraveyardExperience() {
                           aria-pressed={isActive}
                           disabled={isConsuming}
                         >
-                          <span className={styles.ghost} aria-hidden="true">
-                            <span className={styles.ghostEye} />
-                            <span className={styles.ghostEye} />
-                          </span>
+                          <PixelGhost className={styles.ghost} />
                           <span
                             className={`${styles.plant} ${styles[product.plant]}`}
                             aria-hidden="true"
