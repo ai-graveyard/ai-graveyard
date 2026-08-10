@@ -27,7 +27,8 @@ type Emblem =
   | "quad"
   | "soap"
   | "envelope"
-  | "puzzle";
+  | "puzzle"
+  | "manuscript";
 
 type Product = {
   id: string;
@@ -467,6 +468,38 @@ const products: Product[] = [
       },
     },
   },
+  {
+    id: "fastype",
+    name: "fastype",
+    repository: "https://github.com/ai-graveyard/fastype",
+    born: "2026.07",
+    buried: "2026.08",
+    lane: "3",
+    plot: "3",
+    accent: "#38b6ff",
+    plant: "mushroom",
+    emblem: "manuscript",
+    copy: {
+      en: {
+        status: "Open sourced",
+        tagline: "Markdown post formatter",
+        epitaph: "One Markdown for every platform. Everyone kept their old workflow.",
+        autopsy:
+          "A no-account, no-backend editor that turned a single Markdown file into Xiaohongshu card decks and WeChat rich text, with BYOK rewriting on top. Publishing tools live on the platforms' own habits, and nobody switched.",
+        stack: ["Next.js", "CodeMirror 6", "Markdown typesetting"],
+        signal: "0 stars",
+      },
+      zh: {
+        status: "已开源",
+        tagline: "MD 排版工具",
+        epitaph: "一篇 Markdown 通吃所有平台，可大家还是用回了老办法。",
+        autopsy:
+          "一个不用注册、没有后端的编辑器，把同一份 Markdown 同时排成小红书分页图和公众号富文本，还能填自己的 Key 做轻量改写。可排版工具活在平台自己的习惯里，最后没人愿意换。",
+        stack: ["Next.js", "CodeMirror 6", "Markdown 排版"],
+        signal: "0 星标",
+      },
+    },
+  },
 ];
 
 const copy: Record<Language, SiteCopy> = {
@@ -902,6 +935,20 @@ const emblemArt: Record<Emblem, string[]> = {
     ".OOOOOOOOOO.",
     "............",
     "............",
+    "............",
+  ],
+  manuscript: [
+    "..OOOOOO....",
+    "..OWWWWOO...",
+    "..OWWWWWOO..",
+    "..OWWWWWWO..",
+    "..OAAAAAWO..",
+    "..OWWWWWWO..",
+    "..OCCCCCCO..",
+    "..OCCCCCWO..",
+    "..OCCCCCCO..",
+    "..OCCCCWWO..",
+    "..OOOOOOOO..",
     "............",
   ],
 };
