@@ -500,6 +500,38 @@ const products: Product[] = [
       },
     },
   },
+  {
+    id: "dsh-skin",
+    name: "dsh-skin",
+    repository: "https://github.com/ai-graveyard/dsh-skin",
+    born: "2026.08",
+    buried: "2026.08",
+    lane: "3",
+    plot: "4",
+    accent: "#e8500a",
+    plant: "chipflower",
+    emblem: "palette",
+    copy: {
+      en: {
+        status: "Open sourced",
+        tagline: "Harness skin collection",
+        epitaph: "Two fresh coats of paint. The hallway stayed empty.",
+        autopsy:
+          "An installable skin collection for the DeepSeek Harness Web UI, complete with two themes, self-contained bundles, a static gallery, CI and container deployment. It dressed a developer-preview tool for an audience that had not arrived yet.",
+        stack: ["Next.js", "Harness bundles", "CSS theming"],
+        signal: "0 stars",
+      },
+      zh: {
+        status: "已开源",
+        tagline: "Harness 皮肤集合",
+        epitaph: "刷了两层新漆，走廊里还是没人。",
+        autopsy:
+          "一套给 DeepSeek Harness Web UI 换肤的独立皮肤集合：两款主题、可安装 Bundle、静态展廊、CI 和容器部署都配齐了。只是它忙着给 Developer Preview 换衣服时，等着换装的人还没来。",
+        stack: ["Next.js", "Harness Bundle", "CSS 主题"],
+        signal: "0 星标",
+      },
+    },
+  },
 ];
 
 const copy: Record<Language, SiteCopy> = {
