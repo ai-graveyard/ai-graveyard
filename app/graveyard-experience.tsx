@@ -29,7 +29,8 @@ type Emblem =
   | "envelope"
   | "puzzle"
   | "manuscript"
-  | "chives";
+  | "chives"
+  | "parkingsign";
 
 type Product = {
   id: string;
@@ -169,7 +170,7 @@ const products: Product[] = [
         autopsy:
           "A persona builder that made tidy profiles, then discovered nobody wanted another ritual before building.",
         stack: ["TypeScript", "Next.js", "Prompt UX"],
-        signal: "3 stars",
+        signal: "4 stars",
       },
       zh: {
         status: "已开源",
@@ -178,7 +179,7 @@ const products: Product[] = [
         autopsy:
           "一个能整理出漂亮画像的 persona 工具，最后发现大家并不想在动手前再多走一套仪式。",
         stack: ["TypeScript", "Next.js", "提示词体验"],
-        signal: "3 星标",
+        signal: "4 星标",
       },
     },
   },
@@ -561,6 +562,38 @@ const products: Product[] = [
         autopsy:
           "一款零依赖的竖屏小游戏，既能拿镰刀追行情，也能当韭菜躲刀，本地战绩、音效和成绩卡都做全了。可这个梗一局就讲完了，没人等下一茬。",
         stack: ["原生 JavaScript", "Canvas 2D", "网页音频"],
+        signal: "0 星标",
+      },
+    },
+  },
+  {
+    id: "parking-game",
+    name: "parking-game",
+    repository: "https://github.com/ai-graveyard/parking-game",
+    born: "2026.08",
+    buried: "2026.08",
+    lane: "4",
+    plot: "1",
+    accent: "#ff4fa8",
+    plant: "mushroom",
+    emblem: "parkingsign",
+    copy: {
+      en: {
+        status: "Open sourced",
+        tagline: "Parking test game",
+        epitaph: "It let you retake the driving test for fun. Once was enough.",
+        autopsy:
+          "Three test subjects and three difficulties on a procedurally generated lot, with a full-lock steering wheel, tyre-track prediction, scorecards, and a tank that flattens everything when the clock runs out. It nailed the driving-test flashback, and nobody wants that flashback twice.",
+        stack: ["Vanilla JS", "Canvas 2D", "Procedural levels"],
+        signal: "0 stars",
+      },
+      zh: {
+        status: "已开源",
+        tagline: "科目二停车游戏",
+        epitaph: "让你重考一次科目二，考完就没人回来了。",
+        autopsy:
+          "三个科目、三个难度，每局场地随机生成，方向盘左右各能打满一圈，还有轮迹预测和结算战绩图，超时了会开来一辆坦克把场地碾平。科目二的噩梦复刻得很到位，可噩梦这东西没人愿意再做一遍。",
+        stack: ["原生 JavaScript", "Canvas 2D", "随机场地生成"],
         signal: "0 星标",
       },
     },
@@ -1028,6 +1061,20 @@ const emblemArt: Record<Emblem, string[]> = {
     "...OAAAAO...",
     "....OAAO....",
     "....OOOO....",
+    "............",
+  ],
+  parkingsign: [
+    "............",
+    ".OOOOOOOOOO.",
+    ".OAAAAAAAAO.",
+    ".OAWWWWWAAO.",
+    ".OAWAAAWAAO.",
+    ".OAWAAAWAAO.",
+    ".OAWWWWWAAO.",
+    ".OAWAAAAAAO.",
+    ".OAWAAAAAAO.",
+    ".OAAAAAAAAO.",
+    ".OOOOOOOOOO.",
     "............",
   ],
 };
