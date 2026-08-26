@@ -28,7 +28,8 @@ type Emblem =
   | "soap"
   | "envelope"
   | "puzzle"
-  | "manuscript";
+  | "manuscript"
+  | "chives";
 
 type Product = {
   id: string;
@@ -532,6 +533,38 @@ const products: Product[] = [
       },
     },
   },
+  {
+    id: "jiucai-game",
+    name: "jiucai-game",
+    repository: "https://github.com/ai-graveyard/jiucai-game",
+    born: "2026.08",
+    buried: "2026.08",
+    lane: "3",
+    plot: "5",
+    accent: "#8ce35b",
+    plant: "sprout",
+    emblem: "chives",
+    copy: {
+      en: {
+        status: "Open sourced",
+        tagline: "Two-sided harvest game",
+        epitaph: "Everyone learned to time the market. Nobody stayed for the next harvest.",
+        autopsy:
+          "A zero-dependency portrait game where you either chase the market with a sickle or dodge the blade as a chive, with local records, sound effects and a shareable scorecard. The joke is over in one round, and nobody came back for the next crop.",
+        stack: ["Vanilla JS", "Canvas 2D", "Web Audio"],
+        signal: "0 stars",
+      },
+      zh: {
+        status: "已开源",
+        tagline: "双角色割韭菜游戏",
+        epitaph: "人人都学会了择时，下一茬却没人回来。",
+        autopsy:
+          "一款零依赖的竖屏小游戏，既能拿镰刀追行情，也能当韭菜躲刀，本地战绩、音效和成绩卡都做全了。可这个梗一局就讲完了，没人等下一茬。",
+        stack: ["原生 JavaScript", "Canvas 2D", "网页音频"],
+        signal: "0 星标",
+      },
+    },
+  },
 ];
 
 const copy: Record<Language, SiteCopy> = {
@@ -981,6 +1014,20 @@ const emblemArt: Record<Emblem, string[]> = {
     "..OCCCCCCO..",
     "..OCCCCWWO..",
     "..OOOOOOOO..",
+    "............",
+  ],
+  chives: [
+    "............",
+    ".O........O.",
+    ".OA......AO.",
+    ".OA..OA..AO.",
+    ".OAA.OA.AAO.",
+    "..OAAOAAAO..",
+    "..OAAOAAAO..",
+    "...OAAAAO...",
+    "...OAAAAO...",
+    "....OAAO....",
+    "....OOOO....",
     "............",
   ],
 };
