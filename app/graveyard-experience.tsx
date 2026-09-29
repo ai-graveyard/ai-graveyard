@@ -30,7 +30,8 @@ type Emblem =
   | "puzzle"
   | "manuscript"
   | "chives"
-  | "parkingsign";
+  | "parkingsign"
+  | "voxel";
 
 type Product = {
   id: string;
@@ -134,19 +135,20 @@ const products: Product[] = [
     copy: {
       en: {
         status: "Open sourced",
-        tagline: "Graduation readiness quiz",
+        tagline: "Graduation progress tracker",
         epitaph: "Are you ready to graduate? The product already did.",
         autopsy:
-          "A graduation-readiness experiment that left school early and came back as public source.",
-        stack: ["JavaScript", "Web app", "Graduation UX"],
+          "A graduation progress tracker — daily check-ins, writing logs, thesis chapters, a countdown to graduation and a supervisor ping if you go quiet for seven days. It left school early and came back as public source.",
+        stack: ["React 19", "Vite", "LocalStorage"],
         signal: "0 stars",
       },
       zh: {
         status: "已开源",
-        tagline: "毕业准备度测试",
+        tagline: "毕业进度追踪",
         epitaph: "准备毕业了吗？产品已经先毕业了。",
-        autopsy: "一个毕业准备度实验，提前离校，又以公开源码的身份回来。",
-        stack: ["JavaScript", "网页应用", "毕业体验"],
+        autopsy:
+          "一个毕业进度追踪工具：每日签到、写作打卡、论文章节、毕业倒计时，连着七天不签到还会「通知监督人」。它提前离校，又以公开源码的身份回来。",
+        stack: ["React 19", "Vite", "本地存储"],
         signal: "0 星标",
       },
     },
@@ -165,20 +167,21 @@ const products: Product[] = [
     copy: {
       en: {
         status: "Open sourced",
-        tagline: "User persona builder",
-        epitaph: "A thousand personas, no paying users.",
+        tagline: "Portrait styling card",
+        epitaph:
+          "It styled a thousand portraits. Nobody came back for a second fitting.",
         autopsy:
-          "A persona builder that made tidy profiles, then discovered nobody wanted another ritual before building.",
-        stack: ["TypeScript", "Next.js", "Prompt UX"],
+          "Upload one portrait and it returns a 3:4 styling card — makeup, hair, colour analysis, seasonal outfits, jewellery — through an async generation queue that keeps every input and output on disk. The card was made to be shared; the ritual was not made to be repeated.",
+        stack: ["Next.js", "React 19", "Image generation"],
         signal: "4 stars",
       },
       zh: {
         status: "已开源",
-        tagline: "用户画像生成器",
-        epitaph: "一千个人设，没有一个付费用户。",
+        tagline: "形象分析图卡",
+        epitaph: "它替一千张人像做过造型，只是没人想要第二次试衣。",
         autopsy:
-          "一个能整理出漂亮画像的 persona 工具，最后发现大家并不想在动手前再多走一套仪式。",
-        stack: ["TypeScript", "Next.js", "提示词体验"],
+          "上传一张人像，返回一张 3:4 的形象分析图卡：妆容、发型、色彩分析、四季穿搭和珠宝搭配都在里面，异步任务排队跑图，每次输入输出都落盘留档。图卡本来就是拿去分享的，可这套流程没人愿意走第二遍。",
+        stack: ["Next.js", "React 19", "图像生成"],
         signal: "4 星标",
       },
     },
@@ -198,17 +201,18 @@ const products: Product[] = [
       en: {
         status: "Open sourced",
         tagline: "Design style almanac",
-        epitaph: "Twenty-four vibes entered. One graveyard archived them.",
+        epitaph: "Thirty vibes entered. One graveyard archived them.",
         autopsy:
-          "An interactive design-style guide that became more useful as a fossil than as a product bet.",
+          "An interactive guide to thirty web design styles that grew a recipe workbench, an offline single-file build and an installable Skill — more useful as a fossil than as a product bet.",
         stack: ["TypeScript", "Design guide", "Interactive UI"],
         signal: "0 stars",
       },
       zh: {
         status: "已开源",
         tagline: "设计风格图鉴",
-        epitaph: "二十四种 vibe 入场，最后都被墓园归档。",
-        autopsy: "一个互动设计风格指南，作为化石反而比作为产品赌注更有用。",
+        epitaph: "三十种 vibe 入场，最后都被墓园归档。",
+        autopsy:
+          "一份收录三十种网页设计风格的互动指南，后来又长出配方工作台、离线单文件构建和可安装的 Skill——作为化石，它确实比作为产品赌注更有用。",
         stack: ["TypeScript", "设计指南", "交互界面"],
         signal: "0 星标",
       },
@@ -228,20 +232,20 @@ const products: Product[] = [
     copy: {
       en: {
         status: "Open sourced",
-        tagline: "AI interviewer",
+        tagline: "AI interview assistant",
         epitaph: "It asked great questions. Nobody answered.",
         autopsy:
-          "A recruiting assistant with careful loops, buried by a market that wanted fewer interviews, not smarter ones.",
-        stack: ["TypeScript", "LLM UX", "Evaluation"],
+          "A resume-reading assistant with two lenses — what the candidate should fix, what the interviewer will ask — pure frontend, your own API key, nothing uploaded. Buried by a market that wanted fewer interviews, not smarter ones.",
+        stack: ["Next.js", "pdfjs-dist", "BYOK LLM"],
         signal: "2 stars",
       },
       zh: {
         status: "已开源",
-        tagline: "AI 面试官",
+        tagline: "AI 面试助手",
         epitaph: "它问了很好的问题。没人回答。",
         autopsy:
-          "一款流程细致的招聘助手，最后被一个想要更少面试而不是更聪明面试的市场埋掉。",
-        stack: ["TypeScript", "LLM 体验", "评估"],
+          "一个用两种视角读简历的助手：面试者该补什么、面试官会问什么，纯前端处理、自带 API Key、简历不上传。最后被一个想要更少面试、而不是更聪明面试的市场埋掉。",
+        stack: ["Next.js", "pdfjs-dist", "自带 Key 的模型"],
         signal: "2 星标",
       },
     },
@@ -260,20 +264,20 @@ const products: Product[] = [
     copy: {
       en: {
         status: "Open sourced",
-        tagline: "Public-interest AI site",
+        tagline: "Personal AI computer site",
         epitaph: "AI belonged to everyone. The roadmap belonged to nobody.",
         autopsy:
-          "A public-interest AI web project with noble energy and not enough product gravity to stay alive.",
-        stack: ["TypeScript", "AI policy", "Web app"],
+          "The official site for a personal AI computer — local-first, private by default, ready out of the box — with a hero, feature grid, comparison table, ecosystem pitch and Lite / Pro / Enterprise pricing. The landing page shipped; the machine it was selling did not.",
+        stack: ["Next.js 16", "TypeScript", "Framer Motion"],
         signal: "0 stars",
       },
       zh: {
         status: "已开源",
-        tagline: "公益 AI 网站",
+        tagline: "个人 AI 电脑官网",
         epitaph: "AI 属于所有人，路线图不属于任何人。",
         autopsy:
-          "一个公共利益 AI 网站项目，志向很正，但产品引力不足，没能继续活下去。",
-        stack: ["TypeScript", "AI 政策", "网页应用"],
+          "一台「个人 AI 计算机」的官网：本地运行、数据私有、开箱即用，Hero、功能矩阵、对比表、生态和 Lite / Pro / Enterprise 定价一应俱全。落地页做完了，它要卖的那台机器没有。",
+        stack: ["Next.js 16", "TypeScript", "Framer Motion"],
         signal: "0 星标",
       },
     },
@@ -288,24 +292,24 @@ const products: Product[] = [
     plot: "3",
     accent: "#ff7f61",
     plant: "chipflower",
-    emblem: "branch",
+    emblem: "quad",
     copy: {
       en: {
         status: "Open sourced",
-        tagline: "Branching story engine",
+        tagline: "LaTeX chart assistant",
         epitaph: "The plot was generated. The market was not.",
         autopsy:
-          "A story engine that branched into anything except a reason for strangers to return every week.",
-        stack: ["TypeScript", "Story tooling", "Generative UI"],
+          "A chat tool that wrote TikZ/pgfplots code for research figures: you brought your own API key, a third-party service did the compiling, and only people already writing papers ever showed up.",
+        stack: ["Next.js", "TikZ / pgfplots", "QuickLaTeX"],
         signal: "0 stars",
       },
       zh: {
         status: "已开源",
-        tagline: "剧情生成引擎",
-        epitaph: "剧情生成了，市场没有。",
+        tagline: "科研绘图助手",
+        epitaph: "图表画出来了，市场没有。",
         autopsy:
-          "一个故事引擎，可以分叉出任何情节，唯独没长出让陌生人每周回来的理由。",
-        stack: ["TypeScript", "故事工具", "生成式界面"],
+          "一个用对话生成 TikZ / pgfplots 代码的科研绘图工具：得自己配 API Key，编译还得借第三方 QuickLaTeX，最后只有本来就在写论文的人会点开。",
+        stack: ["Next.js", "TikZ / pgfplots", "QuickLaTeX"],
         signal: "0 星标",
       },
     },
@@ -455,7 +459,7 @@ const products: Product[] = [
         tagline: "Needs-and-offers board",
         epitaph: "Ready to introduce everyone to everyone. Almost nobody walked in.",
         autopsy:
-          "One card per person, a public square for “I need” and “I offer”, SMS login, a single-file SQLite box you can self-host, even an open API and an agent skill. Matching needs both sides of the market to show up; only the builder did.",
+          "One card per person, a public square for “I need” and “I offer”, email-code login, a single-file SQLite box you can self-host, even an open API and an agent skill. Matching needs both sides of the market to show up; only the builder did.",
         stack: ["Next.js", "SQLite", "Matchmaking"],
         signal: "0 stars",
       },
@@ -464,7 +468,7 @@ const products: Product[] = [
         tagline: "供需匹配广场",
         epitaph: "它准备好替所有人牵线，可进门的没几个。",
         autopsy:
-          "每人一张名片，把「我需要 / 我提供」挂到公开广场，短信登录、单文件 SQLite、开放 API、Agent Skill 一样不缺。可匹配这件事要供需两头都有人，最后到场的只有作者自己。",
+          "每人一张名片，把「我需要 / 我提供」挂到公开广场，邮箱验证码登录、单文件 SQLite、开放 API、Agent Skill 一样不缺。可匹配这件事要供需两头都有人，最后到场的只有作者自己。",
         stack: ["Next.js", "SQLite", "供需匹配"],
         signal: "0 星标",
       },
@@ -583,7 +587,7 @@ const products: Product[] = [
         tagline: "Parking test game",
         epitaph: "It let you retake the driving test for fun. Once was enough.",
         autopsy:
-          "Three test subjects and three difficulties on a procedurally generated lot, with a full-lock steering wheel, tyre-track prediction, scorecards, and a tank that flattens everything when the clock runs out. It nailed the driving-test flashback, and nobody wants that flashback twice.",
+          "Two test subjects and three difficulties on a procedurally generated lot, with a full-lock steering wheel, tyre-track prediction, scorecards, and a tank that flattens everything when the clock runs out. It nailed the driving-test flashback, and nobody wants that flashback twice.",
         stack: ["Vanilla JS", "Canvas 2D", "Procedural levels"],
         signal: "0 stars",
       },
@@ -592,8 +596,40 @@ const products: Product[] = [
         tagline: "科目二停车游戏",
         epitaph: "让你重考一次科目二，考完就没人回来了。",
         autopsy:
-          "三个科目、三个难度，每局场地随机生成，方向盘左右各能打满一圈，还有轮迹预测和结算战绩图，超时了会开来一辆坦克把场地碾平。科目二的噩梦复刻得很到位，可噩梦这东西没人愿意再做一遍。",
+          "两个科目、三个难度，每局场地随机生成，方向盘左右各能打满一圈，还有轮迹预测和结算战绩图，超时了会开来一辆坦克把场地碾平。科目二的噩梦复刻得很到位，可噩梦这东西没人愿意再做一遍。",
         stack: ["原生 JavaScript", "Canvas 2D", "随机场地生成"],
+        signal: "0 星标",
+      },
+    },
+  },
+  {
+    id: "ai-city",
+    name: "ai-city",
+    repository: "https://github.com/ai-graveyard/ai-city",
+    born: "2026.09",
+    buried: "2026.09",
+    lane: "4",
+    plot: "2",
+    accent: "#8ba85b",
+    plant: "sprout",
+    emblem: "voxel",
+    copy: {
+      en: {
+        status: "Open sourced",
+        tagline: "Voxel island survival sim",
+        epitaph: "Eight residents kept an island alive for seven days. Nobody moved in.",
+        autopsy:
+          "A 40 × 40 Three.js voxel island where eight rule-based residents farm, fish, trade, queue for free workstations and carry medicine to whoever collapsed, all on a one-minute deterministic tick. Swap need-based aid for daily quotas or sealed private supplies and you get a matched pair of seeded runs in a Web Worker, with ledgers, cash flow and rescue deadlines exportable to CSV. A glass-box society worth watching, tuning and auditing — and that is the catch: once the rules are legible, the second run has nothing left to say.",
+        stack: ["Three.js r170", "Vanilla JS modules", "Web Worker", "Deterministic simulation"],
+        signal: "0 stars",
+      },
+      zh: {
+        status: "已开源",
+        tagline: "体素小岛生存",
+        epitaph: "八位居民让一座小岛撑过了七天，却没人愿意搬进去。",
+        autopsy:
+          "一座 40 × 40 的 Three.js 体素小岛：八位规则驱动的居民种地、打鱼、交易、在工位前排队，还要背着药去救倒下的人，全部跑在一分钟一拍的确定性模型上。把按需互助换成每日配额或者封存的私有物资，就能在 Web Worker 里跑出一对配对种子的对照实验，账本、现金流和救援倒计时都能导出成 CSV。这是一个值得围观、调参和审计的玻璃箱社会，问题也在这里：规则一旦读得懂，第二局就没什么新东西可讲了。",
+        stack: ["Three.js r170", "原生 JS 模块", "Web Worker", "确定性仿真"],
         signal: "0 星标",
       },
     },
@@ -1076,6 +1112,20 @@ const emblemArt: Record<Emblem, string[]> = {
     ".OAAAAAAAAO.",
     ".OOOOOOOOOO.",
     "............",
+  ],
+  voxel: [
+    "....OOOO....",
+    "..OOBBBBOO..",
+    ".OBBBBBBBBO.",
+    "OBBBBBBBBBBO",
+    "OABBBBBBBBCO",
+    "OAABBBBBBCCO",
+    "OAAABBBBCCCO",
+    "OAAAAACCCCCO",
+    "OAAAAACCCCCO",
+    ".OAAAACCCCO.",
+    "..OAAACCCO..",
+    ".....OO.....",
   ],
 };
 
