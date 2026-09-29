@@ -5,7 +5,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./graveyard-experience.module.css";
 
 type Language = "en" | "zh";
+/** What the scene actually renders. */
 type Theme = "night" | "day";
+/** What the visitor picked — "auto" follows the clock. */
+type ThemePreference = Theme | "auto";
 
 type ProductCopy = {
   status: string;
@@ -80,6 +83,7 @@ type SiteCopy = {
   controlsAria: string;
   languageToggleAria: string;
   themeToggleAria: string;
+  themeAutoHint: string;
   gravesNav: string;
   eyebrow: string;
   subtitle: string;
@@ -99,6 +103,7 @@ type SiteCopy = {
   noShame: string;
   night: string;
   day: string;
+  auto: string;
   bury: string;
   gravesStat: (count: number) => string;
   standingStat: (count: number) => string;
@@ -642,6 +647,7 @@ const copy: Record<Language, SiteCopy> = {
     controlsAria: "Display preferences",
     languageToggleAria: "Language",
     themeToggleAria: "Theme",
+    themeAutoHint: "Follows the clock: day from 06:00 to 18:00, night otherwise",
     gravesNav: "Graves",
     eyebrow: "Open-source remains",
     subtitle:
@@ -662,6 +668,7 @@ const copy: Record<Language, SiteCopy> = {
     noShame: "0 shame",
     night: "Night",
     day: "Day",
+    auto: "Auto",
     bury: "Bury",
     gravesStat: (count) => `${count} graves`,
     standingStat: (count) => `${count} standing`,
@@ -679,6 +686,7 @@ const copy: Record<Language, SiteCopy> = {
     controlsAria: "显示偏好",
     languageToggleAria: "语言",
     themeToggleAria: "主题",
+    themeAutoHint: "跟随时间：06:00–18:00 为白天，其余时间为夜晚",
     gravesNav: "墓地",
     eyebrow: "开源遗迹",
     subtitle: "一座像素花园，收留那些错过产品市场契合、又作为公开代码回来的 AI 产品。",
@@ -698,6 +706,7 @@ const copy: Record<Language, SiteCopy> = {
     noShame: "0 羞耻",
     night: "夜晚",
     day: "白天",
+    auto: "自动",
     bury: "埋葬",
     gravesStat: (count) => `${count} 座墓`,
     standingStat: (count) => `${count} 座还站着`,
@@ -765,8 +774,36 @@ const zombieBounds = {
 const isLanguage = (value: string | null): value is Language =>
   value === "en" || value === "zh";
 
-const isTheme = (value: string | null): value is Theme =>
-  value === "night" || value === "day";
+const isThemePreference = (value: string | null): value is ThemePreference =>
+  value === "night" || value === "day" || value === "auto";
+
+/** Auto mode turns the lights on at 06:00 and off at 18:00 (local time). */
+const autoDayStartHour = 6;
+const autoNightStartHour = 18;
+
+const resolveAutoTheme = (now: Date): Theme =>
+  now.getHours() >= autoDayStartHour && now.getHours() < autoNightStartHour
+    ? "day"
+    : "night";
+
+/** Milliseconds from `now` to the next 06:00 / 18:00 flip, so auto mode can sit
+    on a timer instead of polling. DST-safe: `setHours` works in local time. */
+const msUntilNextThemeFlip = (now: Date): number => {
+  const flip = new Date(now);
+  const hour = now.getHours();
+
+  if (hour < autoDayStartHour) {
+    flip.setHours(autoDayStartHour, 0, 0, 0);
+  } else if (hour < autoNightStartHour) {
+    flip.setHours(autoNightStartHour, 0, 0, 0);
+  } else {
+    flip.setDate(flip.getDate() + 1);
+    flip.setHours(autoDayStartHour, 0, 0, 0);
+  }
+
+  // A beat past the boundary, so the flip never lands on the same millisecond.
+  return flip.getTime() - now.getTime() + 250;
+};
 
 const getProductYear = (product: Product) => product.born.slice(0, 4);
 
@@ -1296,7 +1333,9 @@ const parseBuriedIds = (value: string | null) => {
 
 export default function GraveyardExperience() {
   const [language, setLanguage] = useState<Language>("en");
-  const [theme, setTheme] = useState<Theme>("night");
+  const [themePreference, setThemePreference] =
+    useState<ThemePreference>("night");
+  const [autoTheme, setAutoTheme] = useState<Theme>("night");
   const [preferencesReady, setPreferencesReady] = useState(false);
   const [activeId, setActiveId] = useState(products[1].id);
   const [dossierDocked, setDossierDocked] = useState(false);
@@ -1325,8 +1364,8 @@ export default function GraveyardExperience() {
         setLanguage(storedLanguage);
       }
 
-      if (isTheme(storedTheme)) {
-        setTheme(storedTheme);
+      if (isThemePreference(storedTheme)) {
+        setThemePreference(storedTheme);
       }
 
       if (storedBuriedIds.size > 0) {
@@ -1364,8 +1403,40 @@ export default function GraveyardExperience() {
       return;
     }
 
-    window.localStorage.setItem(themeStorageKey, theme);
-  }, [preferencesReady, theme]);
+    window.localStorage.setItem(themeStorageKey, themePreference);
+  }, [preferencesReady, themePreference]);
+
+  // Auto mode: resolve now, then re-arm a single timer for the next 06:00/18:00
+  // boundary. The visibility re-check covers a laptop that slept through a flip.
+  useEffect(() => {
+    if (!preferencesReady || themePreference !== "auto") {
+      return;
+    }
+
+    let timer = 0;
+
+    const syncAutoTheme = () => {
+      const now = new Date();
+
+      setAutoTheme(resolveAutoTheme(now));
+      window.clearTimeout(timer);
+      timer = window.setTimeout(syncAutoTheme, msUntilNextThemeFlip(now));
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        syncAutoTheme();
+      }
+    };
+
+    syncAutoTheme();
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [preferencesReady, themePreference]);
 
   useEffect(() => {
     if (!preferencesReady) {
@@ -1591,6 +1662,7 @@ export default function GraveyardExperience() {
   );
 
   const t = copy[language];
+  const theme: Theme = themePreference === "auto" ? autoTheme : themePreference;
   const activeProductCopy = activeProduct.copy[language];
   const buriedCount = buriedIds.size;
   const standingCount = graveCount - buriedCount;
@@ -1599,9 +1671,10 @@ export default function GraveyardExperience() {
   const lastBuriedProduct = lastBuriedId
     ? products.find((product) => product.id === lastBuriedId)
     : null;
-  const themeOptions: { value: Theme; label: string }[] = [
+  const themeOptions: { value: ThemePreference; label: string }[] = [
     { value: "night", label: t.night },
     { value: "day", label: t.day },
+    { value: "auto", label: t.auto },
   ];
 
   // Below the sidebar breakpoint the dossier rises from the bottom edge and
@@ -1751,11 +1824,14 @@ export default function GraveyardExperience() {
                 <button
                   key={option.value}
                   className={`${styles.segmentButton} ${
-                    theme === option.value ? styles.segmentButtonActive : ""
+                    themePreference === option.value
+                      ? styles.segmentButtonActive
+                      : ""
                   }`}
                   type="button"
-                  aria-pressed={theme === option.value}
-                  onClick={() => setTheme(option.value)}
+                  title={option.value === "auto" ? t.themeAutoHint : undefined}
+                  aria-pressed={themePreference === option.value}
+                  onClick={() => setThemePreference(option.value)}
                 >
                   {option.label}
                 </button>
