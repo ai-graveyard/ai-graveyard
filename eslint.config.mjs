@@ -5,6 +5,11 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  {
+    // The standalone browser game uses prototype methods and classic callbacks.
+    files: ["river-adventure-game/**/*.js"],
+    rules: { "@typescript-eslint/no-this-alias": "off" },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

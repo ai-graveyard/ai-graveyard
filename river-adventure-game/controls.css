@@ -1,0 +1,308 @@
+/* Shared controls. Keep layout, variants and states here, not in scene skins. */
+body{
+  --control-paper:#fff8e8;
+  --control-ink:#254332;
+  --control-line:#a87a47;
+  --control-green:#2c533e;
+  --control-pressed:#1e402e;
+  --control-wash:#e7eddb;
+  --control-danger:#8c2f22;
+  --control-focus:#317363;
+  --control-radius:15px;
+  --control-stack-gap:16px;
+  --control-list-gap:14px;
+  --control-wood-face:linear-gradient(#fff5d7,#f3dfb5);
+  --control-wood-edge:#b18b58;
+  --control-wood-shadow:inset 0 1px 0 #fffbee,0 3px 0 #b08a54;
+  --control-wood-pressed:inset 0 1px 0 #fff1ce,0 1px 0 #9c6a3d;
+  --control-selected-face:linear-gradient(#33715f,#255b4a);
+  --control-selected-edge:#dfbe78;
+  --control-selected-ink:#fff4d5;
+  --control-selected-shadow:inset 0 1px 0 #86b299,0 3px 0 #194f43;
+  --control-disabled-face:linear-gradient(#eeece1,#e1dfd1);
+  --control-disabled-edge:#bdb69d;
+  --control-disabled-ink:#72715d;
+  --control-disabled-shadow:inset 0 1px 0 #f8f5e9,0 2px 0 #aaa58d;
+}
+button{
+  box-sizing:border-box;position:relative;min-width:44px;min-height:44px;
+  margin:0;padding:10px 16px;border:1px solid var(--control-line);
+  border-radius:var(--control-radius);background:linear-gradient(#fff5d7,#f3dfb5);
+  color:var(--control-ink);font:inherit;font-size:14px;font-weight:600;
+  line-height:22px;text-align:center;text-decoration:none;text-shadow:none;
+  box-shadow:inset 0 2px 0 #fffbee,0 3px 0 #aa7947,0 5px 8px rgba(31,65,49,.16);cursor:pointer;touch-action:manipulation;
+  transition:background-color .12s,transform .1s,box-shadow .1s,border-color .12s;
+}
+button:enabled:active,button.down{background:#eddbb3;transform:translateY(2px);box-shadow:inset 0 2px 0 #fff1ce,0 1px 0 #9c6a3d}
+button:disabled{background:var(--control-disabled-face);border-color:var(--control-disabled-edge);color:var(--control-disabled-ink);box-shadow:var(--control-disabled-shadow);cursor:default;opacity:1;transform:none}
+button:focus{outline:3px solid var(--control-focus);outline-offset:3px}
+@supports selector(:focus-visible){button:focus:not(:focus-visible){outline:none}}
+.primary,#action,.welcome-guide #skip-coach,.flag-guide #skip-coach,
+#overlay.result-view #restart,#skin-claim:not(:disabled){
+  border:2px solid #75442d;background:linear-gradient(#ffcd76,#f4a45d);
+  color:#542e20;min-height:50px;font-size:17px;font-weight:800;
+  box-shadow:inset 0 2px 0 #ffe9a5,inset 0 -2px 0 #e78c43,0 5px 0 #9b5834,0 8px 12px rgba(30,65,48,.22);
+}
+.primary:enabled:active,#action:enabled:active,#action.down,
+body.river-touch #action,.welcome-guide #skip-coach:enabled:active,
+.flag-guide #skip-coach:enabled:active,#overlay.result-view #restart:enabled:active,#skin-claim:enabled:active{
+  background:#ed9d53;border-color:#75442d;box-shadow:inset 0 2px 0 #ffd989,0 1px 0 #9b5834;transform:translateY(3px);
+}
+.primary:disabled{background:var(--control-disabled-face);border-color:var(--control-disabled-edge);color:var(--control-disabled-ink);box-shadow:var(--control-disabled-shadow)}
+.primary{display:block}
+.card .primary{width:100%;margin:12px 0 0}
+.card .secondary{margin:8px 3px 0}
+.card #settings-close,.card #honors-close,.card #guide-close{min-width:128px;flex-shrink:0;align-self:center}
+
+/* One timber face for menu actions, tabs, choices and disclosures. */
+body #overlay.result-view #result-tabs button,body #overlay.result-view #result-detail-open,body #result-details #result-detail-close,body #result-details #result-detail-dismiss,
+body #overlay.result-view #result-save-retry,body #overlay.result-view .run-actions #home,
+body #overlay.result-view #result-boats-open,body #overlay.result-view #result-honors-open,body #overlay.result-view #result-rank-open,
+.honor-tabs button,.honor-track,#guide-topics>button,
+#guide-panel #guide-replay,#guide-practice-picker .replay-options>button,
+#practice-exit,.boat-choice,#leaderboard-panel .rank-tabs button,
+#leaderboard-panel #rank-more,#guide-content .guide-rules>summary,#result-details>summary{
+  border:1px solid var(--control-wood-edge);border-radius:12px;
+  background:var(--control-wood-face);color:var(--control-ink);
+  box-shadow:var(--control-wood-shadow);
+}
+body #overlay.result-view #result-tabs button[aria-selected="true"],
+.honor-tabs button[aria-selected="true"],.honor-track[aria-pressed="true"],
+#guide-topics>button[aria-pressed="true"],#leaderboard-panel .rank-tabs button[aria-pressed="true"],
+.boat-choice[aria-pressed="true"],.boat-choice[aria-pressed="true"]:disabled{
+  border:2px solid var(--control-selected-edge);background:var(--control-selected-face);
+  color:var(--control-selected-ink);box-shadow:var(--control-selected-shadow);
+}
+body #overlay.result-view #result-tabs button:enabled:active,body #overlay.result-view #result-detail-open:enabled:active,body #result-details #result-detail-close:enabled:active,body #result-details #result-detail-dismiss:enabled:active,
+body #overlay.result-view #result-save-retry:enabled:active,body #overlay.result-view .run-actions #home:enabled:active,
+body #overlay.result-view #result-boats-open:enabled:active,body #overlay.result-view #result-honors-open:enabled:active,body #overlay.result-view #result-rank-open:enabled:active,
+.honor-tabs button:enabled:active,.honor-track:enabled:active,
+#guide-topics>button:enabled:active,#guide-panel #guide-replay:enabled:active,
+#guide-practice-picker .replay-options>button:enabled:active,#practice-exit:enabled:active,
+.boat-choice:enabled:active,#leaderboard-panel .rank-tabs button:enabled:active,
+#leaderboard-panel #rank-more:enabled:active,#guide-content .guide-rules>summary:active,#result-details>summary:active{
+  background:#eddbb3;box-shadow:var(--control-wood-pressed);transform:translateY(2px);
+}
+body #overlay.result-view #result-tabs button[aria-selected="true"]:enabled:active,
+.honor-tabs button[aria-selected="true"]:enabled:active,.honor-track[aria-pressed="true"]:enabled:active,
+#guide-topics>button[aria-pressed="true"]:enabled:active,#leaderboard-panel .rank-tabs button[aria-pressed="true"]:enabled:active,
+.boat-choice[aria-pressed="true"]:enabled:active{
+  background:#215b4d;box-shadow:inset 0 2px 2px #154e42,0 1px 0 #194f43;
+}
+#guide-content .guide-rules>summary,#result-details>summary{padding:10px 12px;min-height:44px;line-height:22px}
+#guide-content .guide-rules>summary{margin:5px 0 9px}
+.boat-choice:disabled{background:var(--control-disabled-face);border-color:var(--control-disabled-edge);color:var(--control-disabled-ink);box-shadow:var(--control-disabled-shadow)}
+.boat-choice[aria-pressed="true"] .boat-copy small{color:#e7ebd0}
+.boat-choice:disabled:not([aria-pressed="true"]) .boat-copy small{color:var(--control-disabled-ink)}
+
+/* Results use the same tab and secondary-action faces as the other menus. */
+body #overlay.result-view #result-tabs button+button,body #overlay.result-view #result-rank-open{margin-left:8px}
+body #overlay.result-view #result-detail-open,body #result-details #result-detail-close{padding:8px 10px;text-decoration:none}body #overlay.result-view #result-save-retry:disabled{background:var(--control-disabled-face);border-color:var(--control-disabled-edge);color:var(--control-disabled-ink);box-shadow:var(--control-disabled-shadow)}
+
+/* Light timber edging: plain honey wood, a soft bevel and a quiet paper face. */
+.card,#coach,.camp-summary{
+  border:4px solid #bb945f;
+  border-radius:16px;background:linear-gradient(#fff5de,#fff0cf);background-clip:padding-box;
+  box-shadow:inset 0 1px 0 #fffaf0,0 2px 0 #96734c,0 8px 20px rgba(23,53,40,.16);color:var(--control-ink);
+}
+.card{padding:24px 22px;animation:camp-arrive .2s ease-out}.card h2{text-shadow:0 2px 0 #fff8df}
+.camp-summary{width:244px;padding:12px 14px;margin-bottom:16px;border-width:4px;box-shadow:inset 0 1px 0 #fffaf0,0 2px 0 #96734c,0 4px 10px rgba(31,65,49,.1)}
+#coach,#coach.welcome-guide{padding:12px 14px}
+#coach.flag-guide{border:4px solid #bb945f;background:#fff0cf}
+#skip-coach{display:block;margin:12px auto 2px;min-width:144px;pointer-events:auto}
+.intro #start{width:244px;max-width:100%;min-height:62px;margin:0 auto;font-size:23px;letter-spacing:3px;border-radius:23px 17px 22px 17px;padding-left:45px}
+.intro #start:before{content:'';position:absolute;left:48px;top:15px;width:30px;height:30px;background-image:url('./assets/game/ui-icons.svg');background-size:1200% 100%;background-position:54.545455% 0;background-repeat:no-repeat}
+.intro-actions{max-width:244px;margin-left:auto;margin-right:auto}
+.intro .skin-button{display:block;width:100%;margin:14px 0 0;padding:9px 10px;font-size:14px;text-align:center;white-space:normal}
+.intro .guide-link{display:block;width:244px;max-width:100%;margin:12px auto 0;min-height:44px}
+.intro .lesson{margin-top:14px;font-size:13px;line-height:22px}
+.intro .record{line-height:22px}
+@keyframes camp-arrive{from{opacity:0;transform:translateY(7px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* Compact header controls and full-size play controls share one silhouette. */
+/* Small equipment medallions and tactile river controls. */
+.tools button{display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;margin-left:7px;flex-shrink:0;border:2px solid #e7ca87;border-radius:50%;background:linear-gradient(#33715f,#255b4a);color:#fff4d5;font-size:0;line-height:0;box-shadow:inset 0 1px 0 #8dbfa5,0 2px 0 #194f43,0 3px 0 #b38a50}
+.tools button:before{content:'';display:block;width:20px;height:20px;background-image:url('./assets/game/ui-icons.svg');background-size:1200% 100%;background-repeat:no-repeat}
+.tools #honors-open:before{background-position:0 0}.tools #settings-open:before{background-position:9.090909% 0}
+.tools #pause:before{background-position:18.181818% 0}
+.tools button:enabled:active{background:#215b4d;box-shadow:inset 0 2px 2px #154e42,0 1px 0 #dfbe78;color:#fff4d5}
+body:not(.running) #pause{display:none}
+.steering-controls{align-items:center;padding:0 8px}
+.steer{display:flex;align-items:center;justify-content:center;pointer-events:auto;touch-action:none;flex:0 0 54px;width:54px;height:54px;padding:0;font-size:0;border:2px solid #e7ca87;border-radius:50%;background:linear-gradient(#33715f,#255b4a);box-shadow:inset 0 1px 0 #8dbfa5,0 2px 0 #194f43,0 3px 0 #b38a50}
+.steer:before{content:'';display:block;width:32px;height:32px;margin:auto;background-image:url('./assets/game/ui-icons.svg');background-size:1200% 100%;background-repeat:no-repeat}
+#steer-left:before{background-position:36.363636% 0}#steer-right:before{background-position:45.454545% 0}
+.steer:enabled:active,.steer.down{background:#215b4d;box-shadow:inset 0 2px 2px #154e42,0 1px 0 #b38a50;transform:translateY(2px)}
+.steering-controls #action,body.rescuing .steering-controls #action{pointer-events:auto;touch-action:none;flex:0 0 136px;width:136px;height:56px;min-height:56px;max-width:none;margin:0 10px;padding:8px 16px 9px;border:2px solid #946b40;border-radius:14px;background:#ffe3a3;color:#294a38;box-shadow:0 2px 0 #80613c;filter:none}
+#action:before{display:none}
+#action>span{display:block;font-size:18px;line-height:20px;font-weight:800;letter-spacing:0}
+#action small{display:block;margin:0;font-size:12px;line-height:15px;font-weight:600;letter-spacing:0;color:inherit}
+#action:focus{outline:3px solid var(--control-focus);outline-offset:3px}
+@supports selector(:focus-visible){#action:focus:not(:focus-visible){outline:none}}
+.steering-controls #action:enabled:active,.steering-controls #action.down,body.river-touch .steering-controls #action,body.rescuing .steering-controls #action:enabled:active,body.rescuing .steering-controls #action.down{background:#f4d38b;color:#294a38;border:2px solid #946b40;box-shadow:0 1px 0 #80613c;filter:none;transform:translateY(1px)}
+body.rescuing .steering-controls #action{color:#752d23}
+
+/* Setting rows use the same button border, with a readable switch position. */
+.settings-list button{width:100%;min-height:48px;box-shadow:inset 0 1px 0 #fff8df,0 2px 0 #c6a471;margin:0 0 var(--control-list-gap);padding:11px 12px;text-align:left;font-size:14px}
+/* Keep the safe choice on the right and emphasize it with the theme green. */
+#reset-teaching-confirm .reset-teaching-actions{display:flex;margin-top:16px}
+#reset-teaching-confirm .reset-teaching-actions button{flex:1 1 0;min-width:0;min-height:48px;margin:0;padding:10px 8px;text-align:center;font-size:14px}
+#reset-teaching-confirm .reset-teaching-actions button+button{margin-left:12px}
+#reset-teaching-cancel:enabled{background:var(--control-selected-face);border:2px solid var(--control-selected-edge);color:var(--control-selected-ink);box-shadow:var(--control-selected-shadow);font-weight:800}
+#reset-teaching-cancel:enabled:active{background:var(--control-pressed);box-shadow:inset 0 1px 0 #62957f,0 1px 0 #194f43}
+.settings-list button[aria-pressed]{padding-right:58px}
+.settings-list button[aria-pressed]:before{content:'';position:absolute;right:12px;top:50%;width:34px;height:20px;margin-top:-10px;border:1px solid #879b82;border-radius:10px;background:#d5d7b2}
+.settings-list button[aria-pressed]:after{content:'';position:absolute;right:29px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;background:#fff8e8;box-shadow:0 1px 2px rgba(24,49,35,.25)}
+.settings-list button[aria-pressed="true"]:before{background:#367b66;border-color:#285e4e}
+.settings-list button[aria-pressed="true"]:after{right:15px}
+.settings-list #quality:before{display:none}
+.settings-list #quality:after{content:'切换';right:12px;width:auto;height:auto;margin-top:-11px;border-radius:0;background:none;box-shadow:none;color:var(--control-ink);font-size:12px;line-height:22px}
+#settings-guide-open{width:100%;text-align:left;margin:0;padding:11px 12px}
+#settings-close{margin-top:var(--control-stack-gap)}
+#buddy-panel #buddy-close{width:100%;min-height:48px;margin:8px 0 0;flex-shrink:0}
+
+/* Fixed actions retain one primary decision and visible secondary buttons. */
+#overlay.pause-view .run-card,#overlay.result-view .run-card{border:4px solid #bb945f;border-radius:16px;background:linear-gradient(#fff5de,#fff0cf);padding:24px 22px 18px;box-shadow:inset 0 1px 0 #fffaf0,0 2px 0 #96734c,0 8px 24px rgba(17,49,39,.18)}
+.run-actions{display:flex;flex-wrap:wrap}
+.run-actions .primary{flex:0 0 100%;width:100%;margin:0 0 8px}
+.run-actions .secondary{flex:1 1 0;min-width:0;margin:0;padding:10px 6px}
+#overlay.result-view #restart{flex:0 0 100%;width:100%;margin:0 0 8px}
+#discard-panel button{width:100%;margin:8px 0 0}
+#discard-panel button+button{margin-top:var(--control-stack-gap)}
+#discard-confirm{color:var(--control-danger);background:linear-gradient(#fff3e7,#f3dfcf);border-color:#b77964}
+#discard-confirm:enabled:active{background:#f4dbc8}
+#result-honors-open{display:flex;align-items:center;justify-content:space-between;width:100%;padding:10px 12px;margin:8px 0;text-align:left}
+#result-honors-open>small{font-size:13px;font-weight:600;color:var(--control-ink);flex-shrink:0}
+#result-details>summary{margin:8px 0 3px;font-size:14px;font-weight:600}
+#result-details>summary:focus{outline:3px solid #317363;outline-offset:3px}
+#opening-skip{position:absolute;right:16px;top:18px;top:calc(18px + var(--top-clear,var(--safe-area-inset-top,var(--native-top,0px))));pointer-events:auto}
+.ticket-kick{box-shadow:none;flex:0 0 44px;width:44px;min-width:44px;min-height:44px;padding:0 3px;border:0;border-left:1px solid #c0ceb4;border-radius:8px;background:#e8efdc;color:#244b3b;font-size:12px;font-weight:700;line-height:20px}
+.ticket-kick:enabled:active{background:#d8e4c8;color:#244b3b}
+
+@media(max-width:350px){
+  .card{padding:20px 16px;border-width:4px;}.camp-summary{padding:8px 10px}
+  .intro #start,.intro .guide-link,.camp-summary{width:228px}
+  .intro-actions{max-width:228px}
+  .tools button{margin-left:5px;width:44px}
+  .steer{width:52px;height:52px;flex-basis:52px}
+}
+body.reduced-motion button,body.reduced-motion .card{animation:none;transition:none}
+@media(prefers-reduced-motion:reduce){button,.card{animation:none;transition:none}}
+
+/* Home and help share the last row in both pause and results menus. */
+#overlay.pause-view .run-actions,#overlay.result-view .run-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-gap:var(--control-stack-gap) 12px;padding-bottom:4px}
+#overlay .run-actions>button{grid-column:1 / -1;width:100%;min-width:0;margin:0}
+#overlay .run-actions #home{grid-column:1;margin:0}
+#overlay .run-actions #run-guide-open{grid-column:2;width:100%;margin:0;min-height:44px;padding:10px 6px}
+#overlay.result-view #restart{margin:0}
+#overlay:not(.pause-view) #settle{display:none}
+
+/* Help stays in menus, leaving the river visible during play. */
+#guide-content #buddy-book-open{display:block;width:100%;min-height:44px;margin:10px 0;padding:10px 12px;text-align:left}
+
+/* Avoid a fresh fade or slide every time a queued message changes. */
+#callout{transition:opacity .16s ease;transform:none}
+
+/* A single collectible replaces the old camp skin-cycle button. */
+.intro .intro-actions{width:100%;max-width:244px}
+.intro .follow-skin-entry{display:flex;align-items:center;min-height:70px;padding:8px 10px;margin-top:var(--control-stack-gap);border:2px solid #7eb59a;border-radius:19px;background:linear-gradient(110deg,#d5eee1,#edf3d8 57%,#fff0bf);box-shadow:inset 0 1px 0 #fff9e6,0 5px 0 #67977e,0 8px 14px rgba(45,81,61,.12);color:#2e574d;text-align:left}
+.skin-entry-art{position:relative;display:block;overflow:hidden;width:58px;height:50px;flex:0 0 58px;margin-right:8px;border-radius:13px}
+.skin-entry-art img{position:absolute;display:block;left:50%;top:50%;width:148%;height:auto;max-width:none;transform:translate(-50%,-59%)}
+.skin-entry-copy{display:block;flex:1;min-width:0}.skin-entry-copy small{display:block;font-size:11px;line-height:19px;color:#416a53;font-weight:700}.skin-entry-copy strong{display:block;font-size:17px;font-weight:900;line-height:26px;white-space:nowrap;color:#244f41;letter-spacing:-.3px}
+#skin-entry-action{display:block;flex-shrink:0;min-width:43px;margin-left:6px;padding:7px 8px;border:1px solid #d17849;border-radius:12px;background:linear-gradient(#ffbd84,#f4976c);box-shadow:inset 0 1px 0 #ffe0a7,0 3px 0 #bc6c42;color:#493b28;font-size:13px;font-weight:900;line-height:20px;text-align:center}
+.intro .follow-skin-entry[data-owned="true"]{border-color:#c5b58c;background:linear-gradient(110deg,#eef2df,#fff0cd);box-shadow:inset 0 1px 0 #fff9e6,0 4px 0 #b39b75}
+.follow-skin-entry[data-owned="true"] .skin-entry-art img{width:100%;transform:translate(-50%,-50%)}
+.follow-skin-entry[data-owned="true"] #skin-entry-action{background:#e2ebcf;border-color:#b1c19d;box-shadow:inset 0 1px 0 #f4f8e9,0 3px 0 #94aa83;color:#355b44}
+.intro .follow-skin-entry:active{transform:translateY(3px);box-shadow:inset 0 1px 0 #fff9e6,0 2px 0 #67977e}
+.skin-card{width:340px;max-width:92%;max-height:90vh;overflow:auto;-webkit-overflow-scrolling:touch;border:2px solid #d2b16e;border-radius:22px;padding:20px;background:#fff4d9;text-align:center;box-shadow:0 12px 45px rgba(15,45,42,.38)}
+.skin-tag{display:block;font-size:12px;color:#78603a;font-weight:700;letter-spacing:1px}.skin-card h2{font-size:26px;margin:6px 0 12px;color:#234c57}
+.skin-art{display:block;width:100%;height:190px;object-fit:cover;object-position:center 68%;border:1px solid #6a8d8d;border-radius:15px;background:#d7eee5}
+.skin-card .skin-description{font-size:14px;line-height:22px;color:#52604c;margin:12px 0 0}
+#skin-status{font-size:13px;line-height:20px;color:#765a31;margin:8px 0;min-height:0}#skin-status:empty{display:none}
+#skin-claim,#skin-close{display:block;width:100%;min-height:46px;margin:var(--control-stack-gap) 0 0;padding:10px;font-size:16px}
+@media(max-width:350px){.intro .intro-actions{max-width:228px}.intro .follow-skin-entry{padding:7px 8px;min-height:66px}.skin-entry-art{width:50px;height:48px;flex-basis:50px;margin-right:7px}.skin-entry-copy strong{font-size:16px}#skin-entry-action{min-width:40px;margin-left:4px;padding:6px}.skin-card{padding:16px}.skin-art{height:164px}}
+@media(max-height:600px){.skin-card{max-height:92vh;padding:14px}.skin-art{height:150px}.skin-card h2{font-size:23px;margin:3px 0 8px}#skin-claim,#skin-close{margin-top:var(--control-stack-gap)}}
+/* Boat selection is a separate settings dialog with direct choices. */
+#boats-open{display:flex;align-items:center}#boats-current{margin-left:auto;padding-left:8px;font-size:12px;color:#48634d}#boats-open>b{margin-left:8px;font-size:22px}
+#boats-panel{z-index:8}.boats-card{display:flex;flex-direction:column;max-width:100%;max-height:100%;overflow:hidden;text-align:left;padding:20px 16px}
+.boats-card h2{margin:0 0 8px;font-size:23px}.boats-card #boats-description{margin:0 0 14px;font-size:13px;color:#48634d;flex-shrink:0}
+.boats-list{min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding:4px 4px 8px}
+.boats-list::-webkit-scrollbar{width:4px}
+.boats-list::-webkit-scrollbar-thumb{border-radius:4px;background:#c9c9ae}
+.boat-choice{display:flex;align-items:center;width:100%;min-height:70px;margin:0 0 var(--control-list-gap);padding:10px 8px;text-align:left;flex-shrink:0}
+.boat-choice:last-child{margin-bottom:0}.boat-choice[aria-pressed="true"]{padding:9px 7px}
+.boat-copy{flex:1;min-width:0}.boat-copy strong{display:block;font-size:15px;line-height:22px}.boat-copy small{display:block;font-size:12px;line-height:18px;font-weight:400;margin-top:2px;color:#48634d}
+.boat-state{flex-shrink:0;margin-left:5px;font-size:12px;line-height:20px}.boat-swatch{display:flex;align-items:center;justify-content:center;flex:0 0 64px;width:64px;height:44px;margin-right:8px}
+.boat-swatch img{display:block;width:64px;height:44px;object-fit:contain;transform:scale(1.3);transform-origin:center}
+.boats-card #boats-status{flex-shrink:0;font-size:13px;color:#48634d;line-height:20px;margin:8px 0 0}.boats-card #boats-status:empty{display:none}.boats-card #boats-close{flex-shrink:0;align-self:stretch;margin:12px 0 0;min-height:46px}
+@media(max-width:350px){.boats-card{padding:16px 10px}.boat-choice{padding-left:6px;padding-right:6px}.boat-choice[aria-pressed="true"]{padding-left:5px;padding-right:5px}.boat-swatch{flex-basis:52px;width:52px;margin-right:6px}.boat-copy strong{font-size:14px}.boat-state{font-size:12px}.boat-swatch img{width:52px;height:40px}}
+
+/* Surfing is a text reminder in the bottom strip, with no click target. */
+
+/* Combo feedback stays just above steering, outside the upper-right coin HUD. */
+#hud-right #coin-panel{min-width:76px;max-width:100%;overflow:hidden}
+#controls #combo-notice{display:flex;align-items:center;width:288px;max-width:calc(100% - 32px);min-height:40px;margin:0 auto 8px;padding:5px 10px;border:1px solid rgba(234,221,174,.5);border-radius:10px;background:rgba(30,66,53,.78);color:#fff0c7;pointer-events:none;text-shadow:none}
+#controls #combo{position:static;top:auto;right:auto;flex:0 0 auto;margin:0 10px 0 0;font-size:17px;line-height:26px;color:#ffe39a;white-space:nowrap;text-align:left;text-shadow:none}
+#controls #combo-meter{position:static;top:auto;right:auto;flex:1 1 auto;min-width:0;width:auto;margin:0;font-size:12px;line-height:18px;color:#fff0c7;text-align:left}
+#controls #combo-next{display:block;overflow-wrap:break-word;word-wrap:break-word}
+#controls #combo-meter>div{height:3px;margin-top:3px;border:0;background:rgba(255,240,199,.22);box-shadow:none}
+#controls #combo-time{display:block}
+body.combo-active #callout.show,body.combo-active #honor-toast{bottom:calc(154px + var(--safe-area-inset-bottom,env(safe-area-inset-bottom,0px)))}
+
+/* Keep full-height actions reachable when the menu exceeds a short viewport. */
+@media(max-height:420px){
+  #overlay.pause-view .run-card{overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+  #overlay.pause-view .run-details{flex:0 0 auto}
+}
+
+/* Settings read as a small camp notebook, with distinct control groups. */
+#settings-panel .settings-card{width:350px;padding:22px 16px 18px;border:4px solid #bb945f;border-radius:16px;background:linear-gradient(#fff5de,#fff0cf);box-shadow:inset 0 1px 0 #fffaf0,0 2px 0 #96734c,0 8px 24px rgba(17,49,39,.18);text-align:left}
+#settings-panel .settings-content{padding:2px 6px 6px}
+#settings-panel .settings-content::-webkit-scrollbar{width:4px}
+#settings-panel .settings-content::-webkit-scrollbar-thumb{border-radius:4px;background:#c9c9ae}
+.settings-heading{margin-bottom:20px}
+#settings-panel .settings-heading h2{display:flex;align-items:center;margin:0;color:#294e3b;font-size:27px;line-height:34px;text-shadow:0 2px 0 #fff8df}
+#settings-panel .settings-heading h2:before{content:"";display:block;flex:0 0 28px;width:28px;height:28px;margin-right:10px;background-image:url("./assets/game/ui-icons.svg");background-size:1200% 100%;background-position:9.090909% 0;background-repeat:no-repeat}
+#settings-panel #boats-open{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:72px;margin:0;padding:3px 14px;border:1px solid #b6c5a4;border-radius:14px;background:#eaf0dc;box-shadow:none;text-align:left}
+.settings-boat-preview{display:block;flex:0 1 128px;min-width:0;width:128px;height:64px;object-fit:contain;transform:scale(1.25);transform-origin:center}
+.settings-boat-copy{display:block;flex:1;min-width:0;margin-left:12px}
+#settings-panel #boats-current{display:block;margin:0;padding:0;color:#34563d;font-size:16px;font-weight:800;line-height:24px;white-space:nowrap}
+.settings-boat-action{display:block;margin:0;font-size:12px;line-height:20px;font-weight:600;color:#546b4c;white-space:nowrap}
+.settings-boat-action b{margin-left:3px;font-size:21px;vertical-align:-1px}
+.settings-group{margin-top:22px}
+#settings-panel .settings-group h3{margin:0 0 10px;padding-left:2px;color:#6d7059;font-size:12px;font-weight:600;line-height:20px}
+#settings-panel .settings-list button{position:relative;display:flex;align-items:center;width:100%;min-height:48px;margin:0;padding:12px 14px;border:1px solid #c9ad7c;border-radius:12px;background:linear-gradient(#fff9e9,#fff3d7);color:#354f3b;font-size:14px;font-weight:600;line-height:22px;box-shadow:inset 0 1px 0 #fffdf4;text-align:left}
+#settings-panel .settings-list button+button{margin-top:var(--control-list-gap)}
+#settings-panel .settings-list button[aria-pressed]{padding-right:68px}
+#settings-panel .settings-list button[aria-pressed]:before{right:14px;width:36px;height:22px;margin-top:-11px;border:1px solid #81917a;background:#d6ddca}
+#settings-panel .settings-list button[aria-pressed]:after{right:33px;width:16px;height:16px;margin-top:-8px;background:#fffdf4;box-shadow:0 1px 3px rgba(26,51,34,.2)}
+#settings-panel .settings-list button[aria-pressed="true"]:before{border-color:#46745b;background:#46745b}
+#settings-panel .settings-list button[aria-pressed="true"]:after{right:17px}
+#settings-panel #quality:before,#settings-panel #quality:after{display:none}
+.settings-value{display:block;margin-left:auto;padding-left:12px;color:#627354;font-size:13px;font-weight:500}
+.settings-chevron{display:block;margin-left:8px;font-size:20px;font-weight:500;line-height:22px;color:#8b9476}
+.settings-help-actions{display:flex}
+#settings-panel .settings-help-actions button{flex:1;min-width:0;min-height:48px;margin:0;padding:10px 8px;border:1px solid var(--control-wood-edge);border-radius:12px;background:var(--control-wood-face);box-shadow:var(--control-wood-shadow);color:var(--control-ink);font-size:14px;font-weight:600;text-align:center}
+#settings-panel .settings-help-actions button+button{margin-left:12px}
+.settings-reset{margin-top:22px;padding-top:10px;border-top:1px solid #e4dcc4;text-align:center}
+#settings-panel #reset-teaching{width:100%;min-height:44px;margin:0;padding:10px 8px;border:0;border-radius:10px;background:transparent;box-shadow:none;color:#94634e;font-size:13px;font-weight:500}
+#settings-panel #reset-teaching-note{margin:0;color:#71715b;font-size:11px;line-height:18px}
+#settings-panel #settings-status{min-height:0;margin:8px 0 0;color:#6d765c;font-size:12px;line-height:20px;text-align:center}
+#settings-panel #settings-status:empty{display:none}
+#settings-panel #settings-close{flex:0 0 auto;align-self:stretch;min-height:48px;margin:16px 6px 0;width:calc(100% - 12px);padding:10px 12px;border:2px solid var(--control-selected-edge);border-radius:13px;background:var(--control-selected-face);box-shadow:var(--control-selected-shadow);color:var(--control-selected-ink);font-size:15px;line-height:24px;font-weight:700}
+#settings-panel .settings-list button:enabled:active{background:#f1e3c2;box-shadow:inset 0 1px 0 #fff4d7;transform:translateY(1px)}
+#settings-panel #boats-open:enabled:active{background:#e8eddc;box-shadow:none;transform:translateY(1px)}
+#settings-panel .settings-help-actions button:enabled:active{background:#eddbb3;box-shadow:var(--control-wood-pressed);transform:translateY(2px)}
+#settings-panel #reset-teaching:enabled:active{background:#f1e8d8;transform:none}
+#settings-panel #settings-close:enabled:active{background:#215b4d;box-shadow:inset 0 2px 2px #154e42,0 1px 0 #194f43;transform:translateY(2px)}
+#settings-panel .settings-help-actions button:disabled,#settings-panel #boats-open:disabled{border-color:var(--control-disabled-edge);background:var(--control-disabled-face);color:var(--control-disabled-ink);box-shadow:var(--control-disabled-shadow)}
+#settings-panel #reset-teaching-confirm{padding:4px 6px 8px}
+#settings-panel #reset-teaching-title{margin:0 0 12px;font-size:23px;line-height:32px;text-shadow:none}
+#settings-panel #reset-teaching-text{margin:0;color:#72735f;font-size:13px;line-height:23px}
+#settings-panel #reset-teaching-status:empty{display:none}
+@media(max-width:350px){
+  #settings-panel .settings-card{padding:18px 10px 14px;border-radius:16px}
+  #settings-panel .settings-content{padding-left:4px;padding-right:4px}
+  #settings-panel .settings-list button{padding-left:12px;font-size:13px}
+  .settings-boat-copy{margin-left:8px}
+  .settings-boat-action{font-size:11px}
+}

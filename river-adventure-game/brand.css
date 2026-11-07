@@ -1,0 +1,51 @@
+/* One visible mark per view; the same decorated title at homepage and play sizes. */
+header .brand{display:none}
+body.running header .brand{display:flex;align-items:center;min-width:0;flex-shrink:0;margin-right:8px;white-space:nowrap;opacity:1}
+.brand-wordmark{display:block;width:168px;height:auto;flex-shrink:0}
+.tools{margin-left:auto}
+.intro .title-logo{width:100%;max-width:340px;margin:5px 0 20px;line-height:1;letter-spacing:0}
+.title-logo img{display:block;width:100%;height:auto}
+#honors-title{display:flex;align-items:center;justify-content:center}
+.badge-art,.badge-stamp.badge-art{display:block;background-repeat:no-repeat;background-size:contain;background-position:center;background-color:transparent;font-size:0;color:transparent;border:0;border-radius:0}
+.badge-art.badge-c01{background-image:url('./assets/brand/honors-v2/c01.svg')}
+.badge-art.badge-c02{background-image:url('./assets/brand/honors-v2/c02.svg')}
+.badge-art.badge-c03{background-image:url('./assets/brand/honors-v2/c03.svg')}
+.badge-art.badge-c04{background-image:url('./assets/brand/honors-v2/c04.svg')}
+.badge-art.badge-c05{background-image:url('./assets/brand/honors-v2/c05.svg')}
+.badge-art.badge-c06{background-image:url('./assets/brand/honors-v2/c06.svg')}
+.badge-art.badge-c07{background-image:url('./assets/brand/honors-v2/c07.svg')}
+.badge-art.badge-c08{background-image:url('./assets/brand/honors-v2/c08.svg')}
+.badge-art.badge-c09{background-image:url('./assets/brand/honors-v2/c09.svg')}
+.badge-art.badge-c10{background-image:url('./assets/brand/honors-v2/c10.svg')}
+.badge-art.badge-c11{background-image:url('./assets/brand/honors-v2/c11.svg')}
+.badge-art.badge-c12{background-image:url('./assets/brand/honors-v2/c12.svg')}
+.badge-art.badge-c13{background-image:url('./assets/brand/honors-v2/c13.svg')}
+.badge-art.badge-c14{background-image:url('./assets/brand/honors-v2/c14.svg')}
+.badge-art.badge-c15{background-image:url('./assets/brand/honors-v2/c15.svg')}
+.badge-art.badge-c16{background-image:url('./assets/brand/honors-v2/c16.svg')}
+.badge-art.badge-c17{background-image:url('./assets/brand/honors-v2/c17.svg')}
+.badge-art.badge-c18{background-image:url('./assets/brand/honors-v2/c18.svg')}
+.badge-art.badge-c19{background-image:url('./assets/brand/honors-v2/c19.svg')}
+.badge-art.badge-c20{background-image:url('./assets/brand/honors-v2/c20.svg')}
+.badge-art.badge-c21{background-image:url('./assets/brand/honors-v2/c21.svg')}
+.badge-art.badge-c22{background-image:url('./assets/brand/honors-v2/c22.svg')}
+.badge-art.badge-c23{background-image:url('./assets/brand/honors-v2/c23.svg')}
+.badge-art.badge-c24{background-image:url('./assets/brand/honors-v2/c24.svg')}
+.honor-tile{flex-direction:column;align-items:center;text-align:center;padding:10px 7px;background:#f1f2e6;border-color:#dce2d2}
+.honor-tile.earned{background:#fff3cf;border-color:#c7a66c}
+.honor-tile .badge-stamp{width:70px;height:70px;flex:0 0 70px;margin:0 0 7px;background-color:transparent;font-size:0;border:0;border-radius:0}
+.honor-tile.locked .badge-stamp{filter:saturate(.28);opacity:.67}
+.honor-tile>div{width:100%;min-width:0}.honor-tile small{min-height:32px;margin:5px 0}
+.honor-tile em{display:block;font-size:10px}.honor-tile.earned em{font-weight:700;color:#816023}
+#honor-toast-icon.badge-art{width:54px;height:54px;flex:0 0 54px;margin-right:10px;border:0;border-radius:0;font-size:0;background-color:transparent}
+#honor-toast{border-color:#e2cf9f;background:#faf5e4}
+@media(max-width:350px){header{padding-left:16px;padding-right:16px}.intro .title-logo{margin-bottom:16px}.honor-tile .badge-stamp{width:62px;height:62px;flex-basis:62px}}
+@media(max-height:650px){.intro .title-logo{max-width:300px;margin-top:0;margin-bottom:16px}#honors-title{margin-top:0;margin-bottom:8px}.honor-book #honor-explain{margin:8px 0}}
+
+
+@media(max-width:360px){
+ body.running header .brand{margin-right:6px}
+ .brand-wordmark{width:146px}
+}
+@media(max-width:350px){.brand-wordmark{width:142px}}
+@media(max-width:300px){.brand-wordmark{width:104px}}

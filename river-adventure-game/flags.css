@@ -1,0 +1,36 @@
+/* Function, duration and a concrete picture stay together at the edge of the river. */
+#flag-status{margin-top:7px;padding:0;background:none;border:0;box-shadow:none;text-align:left}
+#flag-status>span,#hud-right #coin-feedback.flag-gold-reward,#hud-right #flag-cue{position:relative;box-sizing:border-box;width:100%;height:48px;padding:5px 5px 7px 31px;border:1px solid #a87a47;border-left:3px solid var(--flag-color,#e87768);border-radius:9px;background:#fff8e8;color:#254332;font-size:12px;line-height:17px;font-weight:700;white-space:pre-line;font-variant-numeric:tabular-nums}
+#flag-status>span{display:block;margin-top:5px;background:linear-gradient(#dce4cc,#dce4cc) 8px calc(100% - 8px)/calc(100% - 16px) 5px no-repeat,#fff8e8}
+#flag-status>span:first-child{margin-top:0}
+#flag-status>span:before,#coin-feedback.flag-gold-reward:before{content:'';position:absolute;left:4px;top:5px;width:22px;height:22px;background:url('./assets/flags/speed.svg') center/contain no-repeat}
+#flag-status>span:after{content:'';position:absolute;left:8px;right:8px;bottom:8px;height:5px;border-radius:3px;background:var(--flag-color,#e87768);transform-origin:left;transform:scaleX(var(--flag-fill,1))}
+#flag-status-magnet{--flag-color:#4fa58d}#flag-status-guard{--flag-color:#548dc1}
+#flag-status>#flag-status-magnet:before{background-image:url('./assets/flags/magnet.svg?v=magnet-transparent-20261107')}
+#flag-status>#flag-status-guard:before{background-image:url('./assets/flags/guard.svg')}
+#flag-status[hidden],#flag-status>span[hidden]{display:none}
+#hud-right #coin-feedback.flag-gold-reward{--flag-color:#e4af4d;margin-top:7px;text-shadow:none}
+#coin-feedback.flag-gold-reward:before{background-image:url('./assets/flags/gold.svg')}
+#coin-feedback.flag-gold-reward:after{content:'';position:absolute;left:7px;right:7px;bottom:7px;height:12px;background:url('./assets/flags/eight-coins.svg') center/contain no-repeat}
+#hud-right #coin-feedback.magnet-reward{border-color:#4fa58d;background:#eff8e5;color:#285b49}
+/* Upcoming pickup information stays beside the coins; it does not sit over the raft. */
+#hud-right #flag-cue{left:auto;right:auto;top:auto;bottom:auto;transform:none;max-width:none;margin:7px 0 0;padding-left:7px;box-shadow:none;text-align:left;white-space:normal}
+#hud-right #flag-cue strong,#hud-right #flag-cue small{font-size:12px;line-height:17px;color:#254332}
+#hud-right #flag-cue small{font-weight:500;color:#526b53}
+/* One short first-encounter card per function. The river and all timers wait. */
+#flag-intro{box-sizing:border-box;padding:calc(12px + var(--top-clear,0px)) 12px calc(12px + var(--safe-area-inset-bottom,0px));z-index:30}
+#flag-intro[hidden]{display:none}
+#flag-intro .flag-intro-card{box-sizing:border-box;width:360px;max-width:100%;max-height:100%;padding:15px 16px 17px;border:3px solid #bb945f;border-radius:20px;background:#fff8e8;display:flex;flex-direction:column;text-align:left;box-shadow:0 5px 0 #8a633c,0 12px 35px #1b392f33}
+#flag-intro-content{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+#flag-intro-content:focus{outline:2px solid #33715f;outline-offset:-2px}
+#flag-intro-kicker{display:block;color:#84623a;font-size:12px;line-height:20px;font-weight:700;text-align:center}
+#flag-intro-title{font-size:21px;line-height:30px;margin:5px 0 11px;color:#254332;text-align:center}
+#flag-intro-demo{position:relative;height:112px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;margin:0 0 12px;padding-bottom:23px;border:1px solid #d0d5b1;border-radius:13px;background:linear-gradient(#e5f1df,#bddfd1)}
+.flag-demo-effect{width:64px;height:64px;flex-shrink:0}.flag-demo-effect img{display:block;width:64px;height:64px}
+.flag-demo-arrow{margin:0 13px;font-size:33px;font-weight:900;color:#396b54}.flag-demo-raft{width:76px;height:76px}
+#flag-intro-demo-label{position:absolute;left:6px;right:6px;bottom:7px;font-size:13px;line-height:20px;text-align:center;color:#315b45}
+#flag-intro-result{margin:0 0 8px;font-size:17px;font-weight:800;line-height:26px;color:#315b45;text-align:center}
+#flag-intro-action{margin:0;font-size:14px;line-height:23px;color:#4f624b;text-align:center}
+#flag-intro-note{flex-shrink:0;margin:12px 0 8px;font-size:12px;line-height:20px;color:#6e775f;text-align:center}
+#flag-intro-next{flex:0 0 auto;width:100%;min-height:48px;margin:0;font-size:16px;line-height:24px}
+@media(max-height:600px){#flag-intro .flag-intro-card{padding:11px 12px 13px}#flag-intro-title{font-size:19px;line-height:27px;margin-bottom:8px}#flag-intro-demo{height:94px;margin-bottom:9px}.flag-demo-effect,.flag-demo-effect img{width:54px;height:54px}.flag-demo-raft{width:64px;height:64px}#flag-intro-result{font-size:16px;line-height:24px}#flag-intro-note{margin-top:9px}}
